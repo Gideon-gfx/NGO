@@ -1,0 +1,1915 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: 'Exo 2', sans-serif;
+}
+a{
+    text-decoration: none;
+}
+.body{
+    padding: 20px;
+    padding-left: 70px;
+    a {
+        text-decoration: none;
+        color: black;
+    }
+}
+.top{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 20px;
+    padding-right: 60px;
+}
+.top a{
+    font-size: 13px;
+    font-weight: 100;
+    font-family: 'Exo 2', sans-serif;
+}
+.logo{
+    margin-top: 0;
+}
+.logo-link{ display:inline-flex; align-items:center; gap:12px; text-decoration:none; color:inherit; }
+.logoText{ font-family: 'Exo 2', sans-serif; font-size: 22px; font-weight:700; }
+.logo{ white-space: nowrap; }
+.logoImg img{
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+}
+
+/* Logo + nav stays pinned while the News/social utility bar scrolls away with the page.
+   position:sticky can't hold here: .holder's containing block (.body) is only as tall as
+   .top + .holder combined, so it runs out of room and unsticks almost immediately. Pinning
+   is toggled in JS instead (see ngo.js), with .holder-spacer reserving its height so content
+   doesn't jump when it switches to fixed. */
+.holder{
+    background: white;
+    padding: 10px 0;
+}
+.holder.is-pinned{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 10px 20px 10px 70px;
+    background: white;
+}
+.holder.is-pinned.shrink{ padding: 6px 14px 6px 18px; }
+.holder.shrink .logoImg img{ width:40px; height:40px; }
+.holder.shrink .logoText{ font-size:16px; }
+.holder-spacer{
+    height: 0;
+}
+.nav-links{
+    display: none; /* replaced by Bootstrap navbar */
+}
+.navbar .nav-link{
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Exo 2', sans-serif;
+    text-transform: uppercase;
+    gap: 30px;
+}
+.navbar .nav-link:hover{ color: darkgreen; }
+
+/* Partners dropdown styling (desktop & mobile-friendly) */
+.nav-item {
+    position: relative;
+    display: inline-block;
+    gap: 5px;
+    cursor: pointer;
+}
+.nav-item .dropdown {
+    display: none; /* hidden until hover or collapse open */
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 220px;
+    background: #073d1f; /* dark green */
+    color: #e6efe6;
+    padding: 12px 8px;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    z-index: 3000; /* high so it sits above hero carousel */
+}
+
+.nav-item .dropdown a {
+    display:block;
+    padding:8px 12px;
+    color: #dbeeda;
+    text-decoration:none;
+    border-radius:6px;
+}
+.nav-item .dropdown a:hover{ background: rgba(255,255,255,0.04); color: #fff; }
+
+/* show on hover for pointer devices */
+@media (hover: hover) and (min-width: 768px) {
+    .nav-item:hover .dropdown { display: block; }
+}
+
+/* When the collapsed navbar is open on small screens, reveal any dropdowns inline */
+.navbar-collapse.show .nav-item .dropdown {
+    display: block;
+    position: static;
+    transform: none;
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
+}
+
+/* Ensure navbar is above carousel layers when pinned */
+.top-flex nav.navbar{ position: relative; z-index: 2000; }
+
+.d-none{
+    margin-right: 60px;
+    gap: 30px;
+}
+.btn-donate .button{ padding:5px 18px; border-radius:20px; background: transparent; transition: 0.3s ease; color: darkgreen; border: 1px solid grey; }
+.btn-donate .button2{ padding:5px 18px; border-radius:20px; background: transparent; transition: 0.3s ease; color: grey; border: 1px solid grey; }
+.btn-donate .button:hover{ background: darkgreen; color: white; }
+.btn-donate .button2:hover{ background: grey; color: white; }
+
+/* Action buttons container (always visible) */
+.action-buttons{ display: flex; gap: 10px; align-items: center; margin-right: 10px; }
+.donate-link, .apply-link{
+    text-decoration: none;
+    font-weight: 700;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 9px 20px;
+    border-radius: 20px;
+    transition: all 0.25s ease-in-out;
+}
+.donate-link{ color: white; background: darkgreen; border: 1px solid darkgreen; }
+.donate-link:hover{ background: #043c20; border-color: #043c20; color: white; }
+.apply-link{ color: darkgreen; background: transparent; border: 1px solid darkgreen; }
+.apply-link:hover{ background: darkgreen; color: white; }
+
+.action-buttons .donate-link, .action-buttons .apply-link{ display:inline-block; }
+
+/* Custom hamburger button */
+.hamburger-btn{ width:36px; height:32px; display:flex; flex-direction:column; justify-content:space-around; align-items:center; background:transparent; border: none; padding:4px; cursor:pointer; transition: transform 0.25s ease; }
+.hamburger-btn .bar{ display:block; width:22px; height:2px; background:#163f2a; border-radius:2px; transition: transform 0.25s ease, opacity 0.25s ease; }
+.hamburger-btn.open{ transform: translateX(8px); }
+.hamburger-btn.open .bar:nth-child(1){ transform: translateX(4px) rotate(45deg); }
+.hamburger-btn.open .bar:nth-child(2){ opacity: 0; transform: translateX(6px); }
+.hamburger-btn.open .bar:nth-child(3){ transform: translateX(4px) rotate(-45deg); }
+
+/* Mobile: show collapsed nav occupying full width */
+@media (max-width: 767px){
+  .navbar { width: 100%; }
+  .navbar .navbar-collapse { position: absolute; top: 64px; left: 0; right: 0; background: white; padding: 12px 16px; z-index: 1050; }
+  .navbar .nav-link{ padding: 12px 0;gap: 30px; }
+  .navbar-toggler { border: none; }
+    /* On small screens stack action buttons on the right */
+        .action-buttons{ flex-direction: row; align-items: center; gap:8px; margin-right: 8px; }
+        .action-buttons .donate-link, .action-buttons .apply-link{ display:inline-block; padding:6px 10px; font-size:12px; border-radius:8px; }
+        .action-buttons .donate-link{ padding:6px 10px; }
+        .action-buttons .apply-link{ padding:6px 10px; }
+}
+a:hover{
+    color: darkgreen;
+}
+.btn{
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+.btn button{
+    padding:10px 25px;
+    border-radius: 20px;
+    background-color: transparent;
+    color: black;
+    font-size: 10px;
+    font-weight: 600;
+    font-family: 'Exo 2', sans-serif;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+.but1{
+    border: 1px solid green;
+    color: green;
+    transition: 0.3 ease-in-out;
+}
+.but1:hover{
+    background-color: darkgreen;
+    color: white;
+}
+.but2{
+    border: 1px solid grey;
+}
+.but2:hover{
+    background-color: grey;
+    color: white;
+}
+.carousel-inner{
+    height: 100vh;
+    object-fit: cover;
+}
+.row-img{
+    display: flex;
+    gap: 0;
+}
+.row-img a{
+    flex: 1;
+    position: relative;
+    display: block;
+    overflow: hidden;
+}
+.row-img img{
+    width: 100%;
+    height: 300px;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.4s ease, box-shadow 0.4s ease, filter 0.4s ease;
+}
+.row-img a:hover img{
+    transform: translateY(-10px) scale(1.08);
+    box-shadow: 0 18px 34px rgba(0,0,0,0.25);
+    filter: brightness(1.15);
+}
+.row-img-label{
+    position: absolute;
+    left: 50%;
+    bottom: 24px;
+    transform: translate(-50%, 10px);
+    opacity: 0;
+    color: var(--brand);
+    background: rgba(245, 245, 245, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 12px 26px;
+    border-radius: 40px;
+    white-space: nowrap;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+.row-img a:hover .row-img-label{
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+/* .top-flex had no base display:flex (only inside these media queries), so above 992px
+   it fell back to display:block and .logo/.nav stacked instead of sitting on one row --
+   the layout only looked "right" by accident inside the media-query widths, which is why
+   it appeared to snap between the pinned and unpinned states. Set unconditionally instead. */
+.top-flex{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+/* Responsive: stack image row on small screens */
+@media (max-width: 768px) {
+    .row-img {
+        flex-direction: column;
+        gap: 16px;
+    }
+    .row-img img{ height: 240px; }
+    .nav-links { gap: 30px; }
+    .top { align-items: center; justify-content: center; }
+    .top-flex{ margin-right: 10px; }
+    /* Hide the social utility bar on small screens */
+    .top{ display: none; }
+    /* Reduce left padding so logo sits closer to the left on small screens */
+    .body{ padding-left: 12px; padding-right: 12px; }
+    .holder.is-pinned{ padding-left: 12px; padding-right: 12px; }
+    .logoImg img{ width:44px; height:44px; }
+    .logoText{ font-size:18px; }
+}
+
+/* nav.navbar didn't fill the remaining width of .top-flex, so .container-fluid's
+   space-between had no slack to distribute -- the nav links, action buttons and
+   hamburger just sat flush against each other on the right, next to the logo's
+   opposite end. Give nav the remaining space, then truly center the links
+   independent of how wide the action buttons/hamburger are. */
+.top-flex nav.navbar{
+    flex: 1;
+    min-width: 0;
+}
+.container-fluid.p-0.d-flex{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:12px;
+    width: 100%;
+    position: relative;
+}
+@media (min-width: 768px){
+    #mainNav{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.hamburger-btn{ margin-left: 8px; }
+
+/* Carousel: green overlay + caption styling */
+.carousel-item {
+    position: relative;
+    transition: filter 0.6s ease;
+}
+.carousel-item::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(0, 40, 20, 0.15) 0%, rgba(0, 40, 20, 0.65) 100%),
+        rgba(0, 60, 30, 0.3); /* green cast + bottom gradient for caption legibility */
+    pointer-events: none;
+}
+.carousel-item img {
+    object-fit: cover;
+    width: 100%;
+    height: 100vh;
+    transition: transform 0.6s ease;
+}
+/* Bootstrap's own .carousel-caption defaults to text-align:center and a narrow
+   15%/15% box; scoped to the hero carousel so it doesn't affect other carousels.
+   filter:brightness() is applied to the whole slide (not just the img) so the
+   green gradient overlay brightens too -- otherwise the darkest part of that
+   gradient (the bottom, under the caption) would mask the effect entirely. */
+#carouselExampleAutoplaying:hover .carousel-item.active{
+    filter: brightness(1.15);
+}
+#carouselExampleAutoplaying:hover .carousel-item.active img{
+    transform: scale(1.06);
+}
+.carousel-caption {
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    bottom: 14%;
+    top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 640px;
+    color: white;
+    text-align: left;
+    text-shadow: 0 4px 14px rgba(0,0,0,0.35);
+}
+.carousel-caption h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    line-height: 1.15;
+    color: white;
+    margin: 0 0 20px;
+}
+.carousel-caption p {
+    font-size: 1.25rem;
+    color: white;
+    max-width: 520px;
+    margin: 0 0 28px;
+    font-family: 'Exo 2', sans-serif;
+}
+.carousel-caption a{
+    text-decoration: none;
+    cursor: pointer;
+}
+.carousel-item, a{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+}
+.carousel-item .button,
+.carousel-item .button1{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid grey;
+    border-radius: 20px;
+    padding: 12px 26px;
+    background: white;
+    color: darkgreen;
+    margin: 0;
+    transition: 0.3s ease-in-out;
+}
+.carousel-item .button:hover,
+.carousel-item .button1:hover{
+    background: darkgreen;
+    color: white;
+}
+.italics{
+    font-style: italic;
+    font-weight: 300;
+    font-size: 18px;
+    display: flex;
+  justify-content: center;   /* horizontal */
+  align-items: center;       /* vertical */         /* full viewport height */
+  text-align: center;
+}
+.emmanuel{
+display: flex;
+  justify-content:flex-start ;   /* horizontal */
+  align-items: flex-start;       /* vertical */         /* full viewport height */
+}
+
+/* ============================================================
+   Homepage body — palette + shared tokens
+   ============================================================ */
+:root{
+    --brand: darkgreen;
+    --brand-rgb: 0, 100, 0;
+    --brand-dark: #043c20;
+    --ink: #24262a;
+    --ink-rgb: 36, 38, 42;
+    --muted: #6f6f6f;
+    --line: #dfdfdf;
+    --bg-alt: #f5f5f5;
+    --gutter: 40px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+
+.section-inner{
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+}
+.section{
+    padding: 90px 0;
+}
+.two-col{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+}
+.col-text{
+    padding-left: 0;
+}
+@media (min-width: 981px){
+    .col-text{ padding-left: 40px; }
+}
+.alt-bg{
+    background-color: var(--bg-alt);
+}
+
+/* Programs section: very light, desaturated photo behind the grey band (matches the
+   reference site's "light-bg" treatment) */
+.programs-section{
+    position: relative;
+    overflow: hidden;
+}
+.programs-section::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('images/Photo-116.jpeg');
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(1);
+    opacity: 0.14;
+}
+.programs-section .section-inner{
+    position: relative;
+    z-index: 1;
+}
+.eyebrow{
+    display: block;
+    color: var(--brand);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 14px;
+}
+.section h2{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 1.2;
+    color: var(--ink);
+    margin: 0 0 20px;
+}
+@media (min-width: 981px){
+    .section h2{ font-size: 42px; }
+}
+.section p{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin: 0 0 16px;
+}
+.text-link{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--brand);
+    transition: opacity 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+.text-link:hover, .read-more:hover{
+    opacity: 0.6;
+    color: var(--brand);
+}
+.text-link .arrow, .read-more .arrow{
+    transition: transform 0.2s ease-in-out;
+}
+.text-link:hover .arrow, .read-more:hover .arrow{
+    transform: translateX(4px);
+}
+.btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--brand);
+    background: white;
+    border: 1px solid var(--brand);
+    border-radius: 40px;
+    padding: 12px 26px;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+}
+.btn:hover{
+    color: white;
+    background: var(--brand);
+}
+.btn-inverse{
+    color: white;
+    background: transparent;
+    border-color: white;
+}
+.btn-inverse:hover{
+    color: var(--ink);
+    background: white;
+}
+
+/* ============================================================
+   About + stats
+   ============================================================ */
+.stats-grid{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+@media (min-width: 641px){
+    .stats-grid{ grid-template-columns: 1fr 1fr; }
+}
+.stat{
+    text-align: center;
+    padding: 24px;
+    box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.stat-number{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 34px;
+    color: var(--brand);
+    margin: 0 0 10px;
+}
+@media (min-width: 981px){
+    .stat-number{ font-size: 56px; }
+}
+.stat h6{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0;
+}
+
+/* ============================================================
+   Upcoming event card
+   ============================================================ */
+.events-col{
+    align-items: center;
+}
+.event-card{
+    position: relative;
+    display: block;
+    min-height: 380px;
+    border: 1px solid var(--line);
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    filter: grayscale(0.6);
+    transition: filter 0.4s ease-in-out, border-color 0.3s ease-in-out;
+}
+.event-card:hover{
+    filter: grayscale(0);
+    border-color: var(--brand);
+}
+.event-card::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(var(--ink-rgb), 0.15) 0%, rgba(var(--ink-rgb), 0.9) 100%);
+}
+.event-card-overlay{
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 40px;
+    color: white;
+}
+.event-meta{
+    font-family: 'Exo 2', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+    margin-bottom: 14px;
+}
+.event-title{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.3;
+    margin-bottom: 14px;
+}
+.event-excerpt{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin-bottom: auto;
+    padding-bottom: 20px;
+}
+.event-card .read-more{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: white;
+}
+
+/* ============================================================
+   Support
+   ============================================================ */
+.support-image img{
+    width: 100%;
+    height: 100%;
+    max-height: 460px;
+    object-fit: cover;
+}
+
+/* ============================================================
+   Latest news
+   ============================================================ */
+.news-col{
+    align-items: start;
+}
+.news-grid{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+}
+@media (min-width: 641px){
+    .news-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+.news-card img{
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    margin-bottom: 20px;
+    transition: transform 0.45s ease, box-shadow 0.45s ease;
+}
+.news-card:hover img{
+    transform: scale(1.04);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+.archive-meta{
+    font-family: 'Exo 2', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+.news-card h3{
+    margin: 0 0 10px;
+}
+.news-card h3 a{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.35;
+    color: var(--ink);
+}
+.news-card h3 a:hover{
+    color: var(--brand);
+}
+.news-card .excerpt{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0 0 14px;
+}
+.news-card .read-more{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--brand);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   Pre-footer
+   ============================================================ */
+.pre-footer{
+    background-color: var(--ink);
+    padding: 90px 0;
+    text-align: center;
+}
+
+/* Slum2School landmark specific tweaks */
+.slum2-landmark{ background: #f8fbf8; color: var(--ink); padding: 60px 0; }
+.slum2-landmark .col-text{ text-align: left; }
+.slum2-landmark h2{ font-size:32px; margin-top:0; }
+.slum2-landmark h3{ font-size:20px; margin-top:18px; color:var(--brand-dark); }
+.slum2-landmark ul{ margin-top:12px; }
+.slum2-landmark .proposal-image img{ box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+
+/* Logo placed above the Slum2School content */
+.slum2-landmark .slum2-logo-left img{ width:80px; height:80px; object-fit:contain; display:block; margin-bottom:18px; }
+
+/* Convert media grid into stacked block list */
+.slum2-media-grid{ display:block; margin-top:18px; }
+.slum2-media-grid img,
+.slum2-media-grid video{ width:100%; height:auto; display:block; margin-bottom:12px; border-radius:6px; background:#fff; }
+.slum2-media-grid video{ background: black; }
+
+/* CTA buttons stack nicely */
+.slum2-cta{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+
+/* Gallery styles for images inserted into the content (before the Help Us heading) */
+.slum2-gallery{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+.slum2-gallery img{ width: 100%; height: 160px; object-fit: cover; border-radius:6px; display:block; }
+.slum2-gallery img:last-child{ object-fit: contain; background: #fff; padding:8px; }
+/* Ensure videos embedded in the gallery match the image sizing and display */
+.slum2-gallery video{ width:100%; height:160px; object-fit:cover; border-radius:6px; display:block; background:black; }
+
+@media (max-width: 768px){
+    .slum2-landmark .two-col{ display:block; }
+    .slum2-landmark .col-image{ margin-bottom:18px; }
+}
+.pre-footer-heading{
+    max-width: 640px;
+    margin: 0 auto 60px;
+}
+.pre-footer-heading .eyebrow{
+    color: white;
+    text-align: center;
+}
+.pre-footer-heading h2{
+    color: white;
+}
+.pre-footer-heading p{
+    color: rgba(255,255,255,0.8);
+}
+.pre-footer-grid{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 50px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+@media (min-width: 641px){
+    .pre-footer-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 981px){
+    .pre-footer-grid{ grid-template-columns: repeat(4, 1fr); }
+}
+.pre-footer-item .icon{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    color: white;
+    margin-bottom: 18px;
+}
+.pre-footer-item .icon svg{
+    width: 100%;
+    height: 100%;
+}
+.pre-footer-item h4{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: white;
+    margin: 0 0 10px;
+}
+.pre-footer-item p{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.75);
+    margin: 0 0 14px;
+}
+.pre-footer-item a{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.pre-footer-item a:hover{
+    opacity: 0.6;
+    color: white;
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+footer{
+    background-color: black;
+    padding: 60px var(--gutter) 30px;
+}
+.footer-menu{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 40px;
+    max-width: 1440px;
+    margin: 0 auto 50px;
+}
+.footer-col{
+    min-width: 140px;
+}
+.footer-col.logo-col{
+    width: 100%;
+    margin-bottom: 10px;
+}
+@media (min-width: 981px){
+    .footer-col.logo-col{ width: auto; margin-bottom: 0; }
+}
+.footer-col .logo-link{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+.footer-col .logo-link img{
+    width: 32px;
+    height: 32px;
+}
+.footer-col .logo-link span{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: white;
+}
+.footer-col h5{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: white;
+    margin: 0 0 16px;
+}
+.footer-col ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.footer-col li{
+    margin-bottom: 12px;
+}
+.footer-col a{
+    color: white;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    transition: opacity 0.2s ease-in-out;
+}
+.footer-col a:hover{
+    opacity: 0.6;
+    color: white;
+}
+.footer-misc{
+    max-width: 260px;
+}
+.footer-misc .socials{
+    display: flex;
+    gap: 14px;
+    margin: 20px 0;
+}
+.footer-misc .socials a{
+    color: white;
+}
+.footer-misc .funding-text,
+.footer-misc address{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 12px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.75);
+    margin: 0 0 14px;
+}
+.footer-misc address a{
+    font-size: 12px;
+}
+.legal-credits{
+    max-width: 1440px;
+    margin: 0 auto;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+}
+.legal-credits p, .legal-credits a{
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin: 0;
+}
+.legal-credits a:hover{
+    color: white;
+}
+.legal-menu ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 16px;
+}
+
+/* ============================================================
+   Mailing list popup
+   ============================================================ */
+.mailing-popup{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 2000;
+}
+.mailing-popup[hidden]{
+    display: none;
+}
+.mailing-popup-inner{
+    position: relative;
+    background: white;
+    width: 100%;
+    max-width: 420px;
+    padding: 44px 36px;
+    border-radius: 6px;
+    text-align: center;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+    animation: mailing-pop-in 0.3s ease;
+}
+@keyframes mailing-pop-in{
+    from{ opacity: 0; transform: translateY(16px) scale(0.97); }
+    to{ opacity: 1; transform: translateY(0) scale(1); }
+}
+.mailing-popup-inner .eyebrow{
+    text-align: center;
+}
+.mailing-popup-close{
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--muted);
+    cursor: pointer;
+}
+.mailing-popup-close:hover{
+    color: var(--ink);
+}
+.mailing-popup-inner h3{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--ink);
+    margin: 4px 0 12px;
+}
+.mailing-popup-inner p{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0 0 24px;
+}
+.mailing-form{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.mailing-form input[type=email]{
+    padding: 12px 18px;
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+}
+.mailing-form input[type=email]:focus{
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+}
+.mailing-form .btn{
+    width: 100%;
+    justify-content: center;
+    border: none;
+}
+
+/* ============================================================
+   Accessibility toolbar -- slim fixed bar with an upward-opening
+   settings panel anchored above the toggle button
+   ============================================================ */
+body{
+    padding-bottom: 64px; /* keeps footer content clear of the fixed a11y bar */
+}
+.a11y-bar{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    background: var(--ink);
+    z-index: 1900;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.15);
+}
+.a11y-bar-inner{
+    position: relative;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+.a11y-bar-label{
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+    white-space: nowrap;
+}
+.a11y-toggle{
+    flex-shrink: 0;
+    margin-left: auto;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: var(--brand);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+.a11y-toggle:hover,
+.a11y-toggle[aria-expanded="true"]{
+    background: var(--brand-dark);
+}
+
+/* Panel stays in the DOM and animates open/closed via .open, so it can
+   rise up from the bar instead of just appearing inline. */
+.a11y-panel{
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 14px);
+    width: min(380px, calc(100vw - 40px));
+    max-height: 75vh;
+    overflow-y: auto;
+    background: var(--ink);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 -16px 50px rgba(0,0,0,0.35);
+    transform-origin: bottom right;
+    transform: translateY(14px) scale(0.96);
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: transform 0.25s ease, opacity 0.25s ease, visibility 0.25s;
+}
+.a11y-panel.open{
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+}
+.a11y-panel-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+.a11y-panel-header span{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: white;
+}
+.a11y-panel-close{
+    width: 26px;
+    height: 26px;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.7;
+}
+.a11y-panel-close:hover{ opacity: 1; }
+.a11y-panel-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+.a11y-btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 6px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 10px;
+    padding: 10px 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.a11y-btn:hover,
+.a11y-btn[aria-pressed="true"]{
+    background: white;
+    color: var(--ink);
+}
+.a11y-reset{
+    width: 100%;
+    border-radius: 20px;
+    background: transparent;
+}
+
+/* States the toolbar toggles on <body> */
+body.a11y-text-lg{ zoom: 1.15; }
+body.a11y-text-xl{ zoom: 1.3; }
+body.a11y-underline a{ text-decoration: underline !important; }
+body.a11y-contrast{ background: #000; }
+body.a11y-contrast :is(section, .section, .alt-bg, header, .holder, .top, footer, .pre-footer, .a11y-bar){
+    background-color: #000 !important;
+    background-image: none !important;
+}
+body.a11y-contrast :is(h1, h2, h3, h4, h5, h6, p, span, li, .eyebrow, .stat-number, .archive-meta){
+    color: #fff !important;
+}
+body.a11y-contrast a{
+    color: #ffd54a !important;
+}
+body.a11y-contrast .stat{
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.3);
+}
+body.a11y-grayscale{
+    filter: grayscale(1);
+}
+body.a11y-spacing, body.a11y-spacing p, body.a11y-spacing li, body.a11y-spacing a{
+    letter-spacing: 0.03em !important;
+    word-spacing: 0.08em !important;
+    line-height: 1.9 !important;
+}
+body.a11y-reduce-motion *{
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+}
+.a11y-btn[data-a11y="read-aloud"][aria-pressed="true"]{
+    background: var(--brand);
+    border-color: var(--brand);
+    color: white;
+}
+
+@media (max-width: 640px){
+    .a11y-bar-label{ display: none; }
+    .a11y-panel{ right: -8px; }
+}
+
+/* ============================================================
+   Responsive: stack two-col sections on small screens
+   ============================================================ */
+@media (max-width: 980px){
+    .two-col{
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    .section{ padding: 60px 0; }
+    :root{ --gutter: 24px; }
+}
+
+/* ============================================================
+   Inner pages (e.g. support.html): page header + Bootstrap-grid
+   content, harmonized to the site palette/font
+   ============================================================ */
+.page-header{
+    padding: 60px 0 20px;
+}
+.page-header h1{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 800;
+    font-size: 42px;
+    color: var(--ink);
+    margin: 0;
+}
+
+.support-page{
+    padding-top: 20px;
+}
+.support-page,
+.support-page .card{
+    font-family: 'Exo 2', sans-serif;
+}
+.support-page h2{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--ink);
+    margin: 32px 0 16px;
+}
+.support-page p{
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink);
+}
+.support-page .card{
+    border-radius: 10px;
+}
+.support-page .card.bg-light{
+    background-color: var(--bg-alt) !important;
+}
+.support-page .card.bg-dark{
+    background-color: var(--ink) !important;
+}
+.support-page .card-title{
+    color: var(--brand);
+    font-weight: 700;
+}
+.support-page .btn-outline-light{
+    border-color: rgba(255,255,255,0.6);
+}
+.support-page .btn-outline-light:hover{
+    background: white;
+    color: var(--ink);
+}
+.support-page .btn-light{
+    background: white;
+    color: var(--brand);
+    font-weight: 600;
+    border: none;
+}
+.support-page .btn-light:hover{
+    background: var(--brand);
+    color: white;
+}
+.support-page a:not(.btn){
+    color: var(--brand);
+}
+
+/* Video / PDF viewers: view-only, native download controls suppressed where the
+   browser allows it. Note: this is a front-end deterrent, not real access control --
+   anyone with the direct file URL can still fetch it. */
+.viewer-block{
+    margin-top: 48px;
+}
+.viewer-block h3{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+}
+.viewer-note{
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 0;
+}
+.pdf-viewer{
+    height: 80vh;
+    min-height: 500px;
+    margin-top: 12px;
+}
+.pdf-viewer iframe{
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* ============================================================
+   Page hero banner (About / Program / Event / News / Connect)
+   ============================================================ */
+.page-hero{
+    position: relative;
+}
+.page-hero .featured-image{
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+.page-hero .featured-image::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(0, 50, 25, 0.9) 0%, rgba(0, 50, 25, 0.55) 100%);
+}
+.page-hero .overlay{
+    position: relative;
+    z-index: 2;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 90px 24px;
+    color: white;
+}
+@media (min-width: 981px){
+    .page-hero .overlay{
+        min-height: 42rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 90px 60px;
+    }
+}
+.page-hero .eyebrow{ color: white; }
+.page-hero h1{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 800;
+    font-size: 3rem;
+    color: white;
+    margin: 0 0 16px;
+    line-height: 1.1;
+}
+@media (min-width: 981px){
+    .page-hero h1{ font-size: 4.5rem; }
+}
+.page-hero .subtitle{
+    font-family: 'Exo 2', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 300;
+    max-width: 600px;
+    margin: 0;
+    color: rgba(255,255,255,0.9);
+}
+
+/* ============================================================
+   Reusable content patterns for inner pages
+   ============================================================ */
+.content-section{
+    padding: 70px 0;
+}
+.content-section.alt-bg{ background-color: var(--bg-alt); }
+.content-section h2{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 16px;
+}
+.content-section p{
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink);
+}
+
+/* Team / board grid */
+.team-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 32px;
+    margin-top: 40px;
+}
+.team-card{
+    text-align: center;
+}
+.team-card .avatar{
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    background: var(--bg-alt);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    border: 3px solid white;
+    box-shadow: 0 0 0 1px var(--line);
+}
+.team-card .avatar.avatar-img{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: transparent;
+}
+.team-card .avatar.avatar-img::after{
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+.team-card h4{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--ink);
+    margin: 0 0 4px;
+}
+.team-card .role{
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--brand);
+    margin: 0;
+}
+
+/* Hub / location cards */
+.hub-grid{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 40px;
+}
+@media (min-width: 641px){
+    .hub-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+.hub-card{
+    position: relative;
+    display: block;
+    height: 280px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+}
+.hub-card::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,40,20,0.85) 0%, rgba(0,40,20,0.1) 60%);
+}
+.hub-card .hub-card-label{
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    bottom: 18px;
+    z-index: 2;
+    color: white;
+}
+.hub-card h4{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    margin: 0 0 4px;
+    color: white;
+}
+.hub-card p{
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    margin: 0;
+}
+
+/* Program track cards */
+.track-grid{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 40px;
+}
+@media (min-width: 641px){
+    .track-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 981px){
+    .track-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+.track-card{
+    padding: 28px;
+    background: white;
+    box-shadow: 0 0 40px 0 rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+.track-card .track-age{
+    display: inline-block;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: white;
+    background: var(--brand);
+    border-radius: 20px;
+    padding: 4px 12px;
+    margin-bottom: 14px;
+}
+.track-card h4{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--ink);
+    margin: 0 0 10px;
+}
+.track-card p{
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* Event list cards (full event page, expands on the single homepage card) */
+.event-list{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 40px;
+}
+.event-list .event-card{
+    min-height: 220px;
+}
+@media (min-width: 641px){
+    .event-list .event-card{
+        display: flex;
+        align-items: flex-end;
+    }
+}
+
+/* News grid (full news page) */
+.news-page-grid{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin-top: 40px;
+}
+@media (min-width: 641px){
+    .news-page-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 981px){
+    .news-page-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Contact page layout */
+.contact-grid{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+}
+@media (min-width: 981px){
+    .contact-grid{ grid-template-columns: 1fr 1fr; }
+}
+.contact-card{
+    background: var(--bg-alt);
+    padding: 32px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.contact-card h4{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 12px;
+}
+.contact-card p, .contact-card a{
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--ink);
+}
+.contact-form{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.contact-form label{
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ink);
+    margin-bottom: 6px;
+    display: block;
+}
+.contact-form input,
+.contact-form textarea{
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    resize: vertical;
+}
+.contact-form input:focus,
+.contact-form textarea:focus{
+    outline: 2px solid var(--brand);
+    outline-offset: 1px;
+}
+
+/* ============================================================
+   Donate page: frequency toggle + amount chips
+   ============================================================ */
+.donate-form{
+    background: var(--bg-alt);
+    padding: 36px;
+    border-radius: 10px;
+}
+.frequency-toggle{
+    display: inline-flex;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    padding: 4px;
+    margin-bottom: 24px;
+}
+.frequency-toggle input{
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.frequency-toggle label{
+    font-family: 'Exo 2', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 22px;
+    border-radius: 24px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.2s ease;
+}
+.frequency-toggle input:checked + label{
+    background: var(--brand);
+    color: white;
+}
+.amount-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.amount-grid input{
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.amount-chip{
+    display: block;
+    text-align: center;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.amount-grid input:checked + .amount-chip{
+    background: var(--brand);
+    border-color: var(--brand);
+    color: white;
+}
+.amount-chip:hover{
+    border-color: var(--brand);
+}
+.custom-amount{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 4px 4px 4px 16px;
+    margin-bottom: 20px;
+}
+.custom-amount span{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    color: var(--muted);
+}
+.custom-amount input{
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 15px;
+    padding: 10px 0;
+}
+.custom-amount input:focus{ outline: none; }
+.donate-form .field-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+@media (max-width: 640px){
+    .donate-form .field-row{ grid-template-columns: 1fr; }
+    .amount-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Ways-to-give cards */
+.give-grid{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 40px;
+}
+@media (min-width: 641px){
+    .give-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+.give-card{
+    padding: 28px;
+    background: white;
+    box-shadow: 0 0 40px 0 rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+.give-card .icon{
+    color: var(--brand);
+    margin-bottom: 14px;
+    display: inline-flex;
+}
+.give-card h4{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--ink);
+    margin: 0 0 10px;
+}
+.give-card p{
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0 0 14px;
+}
+
+/* ============================================================
+   Apply page: numbered steps + application form
+   ============================================================ */
+.steps-list{
+    counter-reset: step;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 40px;
+}
+@media (min-width: 641px){
+    .steps-list{ grid-template-columns: repeat(4, 1fr); }
+}
+.step-item{
+    position: relative;
+    padding: 28px 22px 22px;
+    background: var(--bg-alt);
+    border-radius: 8px;
+}
+.step-item::before{
+    counter-increment: step;
+    content: counter(step);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--brand);
+    color: white;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 14px;
+}
+.step-item h4{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ink);
+    margin: 0 0 8px;
+}
+.step-item p{
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+}
+.apply-form{
+    background: var(--bg-alt);
+    padding: 36px;
+    border-radius: 10px;
+}
+.apply-form .field-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+@media (max-width: 640px){
+    .apply-form .field-row{ grid-template-columns: 1fr; }
+}
+.apply-form select{
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    background: white;
+}
+.apply-form select:focus{
+    outline: 2px solid var(--brand);
+    outline-offset: 1px;
+}
+
+/* Async form submit success state (donate/apply/contact forms with data-async) */
+.form-success{
+    text-align: center;
+    padding: 48px 24px;
+    background: var(--bg-alt);
+    border-radius: 10px;
+}
+.form-success .icon{
+    color: var(--brand);
+    margin-bottom: 16px;
+}
+.form-success h4{
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--ink);
+    margin: 0 0 10px;
+}
+.form-success p{
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 420px;
+    margin: 0 auto;
+}
