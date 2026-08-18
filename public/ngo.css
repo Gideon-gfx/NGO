@@ -81,8 +81,32 @@ a{
     gap: 5px;
     cursor: pointer;
 }
+.nav-item.dropdown-holder {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.nav-item.dropdown-holder > .partners-toggle {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Exo 2', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    padding: 0.5rem 0;
+    cursor: pointer;
+}
+.nav-item.dropdown-holder > .partners-toggle:focus,
+.nav-item.dropdown-holder > .partners-toggle:hover {
+    color: darkgreen;
+    outline: none;
+}
 .nav-item .dropdown {
-    display: none; /* hidden until hover or collapse open */
+    display: none; /* hidden until hover/click or collapse open */
     position: absolute;
     top: calc(100% + 8px);
     left: 50%;
@@ -105,9 +129,36 @@ a{
 }
 .nav-item .dropdown a:hover{ background: rgba(255,255,255,0.04); color: #fff; }
 
-/* show on hover for pointer devices */
+/* keep dropdown open while pointer is over the trigger or menu */
 @media (hover: hover) and (min-width: 768px) {
-    .nav-item:hover .dropdown { display: block; }
+    .nav-item.dropdown-holder:hover > .dropdown,
+    .nav-item.dropdown-holder:focus-within > .dropdown,
+    .nav-item.dropdown-holder.open > .dropdown { display: block; }
+}
+
+/* On mobile, open only when toggled and keep menu readable */
+@media (max-width: 767px) {
+    .nav-item.dropdown-holder {
+        display: block;
+    }
+    .nav-item.dropdown-holder > .partners-toggle {
+        width: 100%;
+        text-align: left;
+        padding: 12px 0;
+    }
+    .nav-item.dropdown-holder .dropdown {
+        display: none;
+        position: static;
+        transform: none;
+        min-width: 0;
+        box-shadow: none;
+        background: transparent;
+        padding: 0 0 0 12px;
+        border-radius: 0;
+    }
+    .nav-item.dropdown-holder.open > .dropdown {
+        display: block;
+    }
 }
 
 /* When the collapsed navbar is open on small screens, reveal any dropdowns inline */

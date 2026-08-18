@@ -2,20 +2,49 @@ document.addEventListener('DOMContentLoaded', function(){
   const btn = document.querySelector('.hamburger-btn');
   const collapse = document.getElementById('mainNav');
 
-  if(!btn) return;
+  if(btn){
+    btn.addEventListener('click', function(){
+      btn.classList.toggle('open');
+      setTimeout(() => {
+        if(collapse && collapse.classList.contains('show')){
+          collapse.classList.remove('show');
+        } else if(collapse){
+          collapse.classList.add('show');
+        }
+      }, 20);
+    });
+  }
 
-  btn.addEventListener('click', function(){
-    // toggle class for hamburger sideways animation
-    btn.classList.toggle('open');
+  const partnerMenus = document.querySelectorAll('.nav-item.dropdown-holder');
+  partnerMenus.forEach((menu) => {
+    const trigger = menu.querySelector('.partners-toggle');
+    if(!trigger) return;
 
-    // Bootstrap collapse toggles via data attributes; ensure class matches state
-    setTimeout(()=>{
-      if(collapse.classList.contains('show')){
-        collapse.classList.remove('show');
-      } else {
-        collapse.classList.add('show');
-      }
-    }, 20);
+    const setOpen = (isOpen) => {
+      menu.classList.toggle('open', isOpen);
+      trigger.setAttribute('aria-expanded', String(isOpen));
+    };
+
+    const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+    if(isDesktop){
+      menu.addEventListener('mouseenter', () => setOpen(true));
+      menu.addEventListener('mouseleave', () => setOpen(false));
+      trigger.addEventListener('click', (event) => {
+        event.preventDefault();
+        const willOpen = !menu.classList.contains('open');
+        setOpen(willOpen);
+      });
+    } else {
+      trigger.addEventListener('click', (event) => {
+        event.preventDefault();
+        const willOpen = !menu.classList.contains('open');
+        setOpen(willOpen);
+      });
+    }
+
+    document.addEventListener('click', (event) => {
+      if(!menu.contains(event.target)) setOpen(false);
+    });
   });
 });
 
@@ -266,40 +295,6 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
   applyState();
-});
-
-document.addEventListener('DOMContentLoaded', function(){
-  // Forms marked data-async submit via fetch and swap in a .form-success
-  // message instead of navigating to the backend's raw JSON response.
-  // The backend here (server.js) is a placeholder -- it just echoes the
-  // submitted fields back, it doesn't email anyone, charge a card, or save
-  // to a database. Swap in real handling before this goes live.
-  document.querySelectorAll('form[data-async]').forEach(function(form){
-    const successEl = document.getElementById(form.dataset.successTarget);
-    form.addEventListener('submit', async function(event){
-      event.preventDefault();
-      const btn = form.querySelector('button[type="submit"]');
-      const originalLabel = btn ? btn.textContent : '';
-      if(btn){ btn.disabled = true; btn.textContent = 'Sending...'; }
-
-      try{
-        const body = new URLSearchParams(new FormData(form));
-        const res = await fetch(form.action, {
-          method: form.method || 'POST',
-          headers: { 'Accept': 'application/json' },
-          body: body
-        });
-        if(!res.ok) throw new Error('Request failed with ' + res.status);
-
-        form.hidden = true;
-        if(successEl) successEl.hidden = false;
-        successEl && successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      } catch(err){
-        if(btn){ btn.disabled = false; btn.textContent = originalLabel; }
-        alert('Something went wrong sending this. Please try again, or email us directly.');
-      }
-    });
-  });
 });
 
 document.addEventListener('DOMContentLoaded', function(){

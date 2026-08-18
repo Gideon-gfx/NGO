@@ -122,7 +122,10 @@
                 <p style="font-size:13px; color:var(--muted);">Note: this form currently submits your details to us directly &ndash; there's no online waitlist system yet, so expect a personal follow-up rather than an instant confirmation.</p>
             </div>
             <div class="col">
-                <form class="apply-form" method="post" action="/apply" data-async data-success-target="apply-success">
+                <form class="apply-form" method="POST" action="https://formspree.io/f/xjybanyk">
+                    <input type="hidden" name="_subject" value="Lagos Sistema Application">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="formType" value="application">
                     <div class="field-row">
                         <div>
                             <label for="apply-child-name">Child's Full Name</label>
@@ -169,6 +172,37 @@
                     <h4>Application Received!</h4>
                     <p>Thank you for applying to Lagos Sistema. We'll be in touch by email or phone within 5 business days to arrange a hub visit.</p>
                 </div>
+                <form class="apply-form sponsor-form" method="POST" action="https://formspree.io/f/xjybanyk" style="margin-top: 2rem;">
+                    <input type="hidden" name="_subject" value="Lagos Sistema Sponsorship Inquiry">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="formType" value="sponsor">
+                    <h3 style="margin-bottom:1rem;">Sponsor A Child or Hub</h3>
+                    <div class="field-row">
+                        <div>
+                            <label for="sponsor-name">Your Name</label>
+                            <input type="text" id="sponsor-name" name="sponsorName" placeholder="Your full name" required>
+                        </div>
+                        <div>
+                            <label for="sponsor-org">Organization / Company</label>
+                            <input type="text" id="sponsor-org" name="organization" placeholder="Org name (optional)">
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div>
+                            <label for="sponsor-email">Email</label>
+                            <input type="email" id="sponsor-email" name="sponsorEmail" placeholder="you@example.com" required>
+                        </div>
+                        <div>
+                            <label for="sponsor-phone">Phone</label>
+                            <input type="tel" id="sponsor-phone" name="sponsorPhone" placeholder="+234&hellip;" required>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:16px;">
+                        <label for="sponsor-message">How Would You Like To Support Us?</label>
+                        <textarea id="sponsor-message" name="sponsorMessage" rows="4" placeholder="Student sponsorship, equipment donation, event support, corporate partnership..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn" style="width:100%; justify-content:center; border:none; background:#0d3d2a; color:white;">Send Sponsorship Inquiry</button>
+                </form>
             </div>
         </div>
     </section>
