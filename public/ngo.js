@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const partnerMenus =
         document.querySelectorAll(
-            '.nav-item.dropdown-holder, .nav-item:has(> .dropdown)'
+            '.nav-item.dropdown-holder, .nav-item:has(> .dropdown), .nav-item:has(> .dropdown-menu)'
         );
 
 
@@ -56,17 +56,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 '.partners-toggle, :scope > .nav-link, :scope > a'
             );
 
-        if (!trigger && menu.querySelector(':scope > .dropdown')) {
+        if (!trigger && menu.querySelector(':scope > .dropdown, :scope > .dropdown-menu')) {
             const partnerText = Array.from(menu.childNodes).find((node) =>
                 node.nodeType === Node.TEXT_NODE &&
                 node.textContent.trim().toLowerCase() === 'partners'
             );
 
             if (partnerText) {
-                trigger = document.createElement('button');
-                trigger.type = 'button';
+                trigger = document.createElement('span');
                 trigger.className = 'partners-toggle';
                 trigger.textContent = 'Partners';
+                trigger.setAttribute('role', 'button');
+                trigger.setAttribute('tabindex', '0');
                 trigger.setAttribute('aria-expanded', 'false');
                 partnerText.replaceWith(trigger);
             }
@@ -146,6 +147,13 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
         }
+
+        trigger.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                setOpen(!menu.classList.contains('open'));
+            }
+        });
 
         // Keep the menu closed when the hamburger opens; Partners opens only
         // after its own trigger is clicked.
