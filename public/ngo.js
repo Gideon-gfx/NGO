@@ -1,355 +1,2107 @@
-document.addEventListener('DOMContentLoaded', function(){
-  const btn = document.querySelector('.hamburger-btn');
-  const collapse = document.getElementById('mainNav');
+document.addEventListener('DOMContentLoaded', function () {
 
-  if(btn){
-    btn.addEventListener('click', function(){
-      btn.classList.toggle('open');
-      setTimeout(() => {
-        if(collapse && collapse.classList.contains('show')){
-          collapse.classList.remove('show');
-        } else if(collapse){
-          collapse.classList.add('show');
+    // ============================================================
+    // HAMBURGER NAVIGATION
+    // ============================================================
+
+    const btn =
+        document.querySelector('.hamburger-btn');
+
+    const collapse =
+        document.getElementById('mainNav');
+
+
+    if (btn) {
+
+        btn.addEventListener('click', function () {
+
+            btn.classList.toggle('open');
+
+            setTimeout(() => {
+
+                if (
+                    collapse &&
+                    collapse.classList.contains('show')
+                ) {
+
+                    collapse.classList.remove('show');
+
+                } else if (collapse) {
+
+                    collapse.classList.add('show');
+
+                }
+
+            }, 20);
+
+        });
+
+    }
+
+
+    // ============================================================
+    // PARTNER DROPDOWNS
+    // ============================================================
+
+    const partnerMenus =
+        document.querySelectorAll(
+            '.nav-item.dropdown-holder, .nav-item:has(> .dropdown)'
+        );
+
+
+    partnerMenus.forEach((menu) => {
+
+        const trigger =
+            menu.querySelector(
+                '.partners-toggle, :scope > .nav-link'
+            ) || menu.firstChild;
+
+
+        if (!trigger || trigger.nodeType !== Node.ELEMENT_NODE) return;
+
+
+        const setOpen = (isOpen) => {
+
+            menu.classList.toggle(
+                'open',
+                isOpen
+            );
+
+            trigger.setAttribute(
+                'aria-expanded',
+                String(isOpen)
+            );
+
+        };
+
+
+        const isDesktop =
+            window.matchMedia(
+                '(min-width: 768px)'
+            ).matches;
+
+
+        if (isDesktop) {
+
+            menu.addEventListener(
+                'mouseenter',
+                () => setOpen(true)
+            );
+
+
+            menu.addEventListener(
+                'mouseleave',
+                () => setOpen(false)
+            );
+
+
+            trigger.addEventListener(
+                'click',
+                (event) => {
+
+                    event.preventDefault();
+
+                    const willOpen =
+                        !menu.classList.contains(
+                            'open'
+                        );
+
+                    setOpen(willOpen);
+
+                }
+            );
+
+        } else {
+
+            trigger.addEventListener(
+                'click',
+                (event) => {
+
+                    event.preventDefault();
+
+                    const willOpen =
+                        !menu.classList.contains(
+                            'open'
+                        );
+
+                    setOpen(willOpen);
+
+                }
+            );
+
         }
-      }, 20);
+
+
+        document.addEventListener(
+            'click',
+            (event) => {
+
+                if (
+                    !menu.contains(
+                        event.target
+                    )
+                ) {
+
+                    setOpen(false);
+
+                }
+
+            }
+        );
+
     });
-  }
 
-  const partnerMenus = document.querySelectorAll('.nav-item.dropdown-holder');
-  partnerMenus.forEach((menu) => {
-    const trigger = menu.querySelector('.partners-toggle');
-    if(!trigger) return;
+});
 
-    const setOpen = (isOpen) => {
-      menu.classList.toggle('open', isOpen);
-      trigger.setAttribute('aria-expanded', String(isOpen));
+
+// ============================================================
+// COUNTERS
+// ============================================================
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const counters =
+        document.querySelectorAll(
+            '.stat-number[data-count]'
+        );
+
+
+    if (!counters.length) return;
+
+
+    const animateCounter = (el) => {
+
+        const target =
+            parseInt(
+                el.dataset.count,
+                10
+            );
+
+
+        if (!Number.isFinite(target)) return;
+
+
+        const suffix =
+            el.dataset.suffix || '';
+
+
+        const duration = 1500;
+
+        const start =
+            performance.now();
+
+
+        const step = (now) => {
+
+            const progress =
+                Math.min(
+                    (now - start) /
+                    duration,
+                    1
+                );
+
+
+            const value =
+                Math.round(
+                    target * progress
+                );
+
+
+            el.textContent =
+                value + suffix;
+
+
+            if (progress < 1) {
+
+                requestAnimationFrame(step);
+
+            }
+
+        };
+
+
+        requestAnimationFrame(step);
+
     };
 
-    const isDesktop = window.matchMedia('(min-width: 768px)').matches;
-    if(isDesktop){
-      menu.addEventListener('mouseenter', () => setOpen(true));
-      menu.addEventListener('mouseleave', () => setOpen(false));
-      trigger.addEventListener('click', (event) => {
-        event.preventDefault();
-        const willOpen = !menu.classList.contains('open');
-        setOpen(willOpen);
-      });
-    } else {
-      trigger.addEventListener('click', (event) => {
-        event.preventDefault();
-        const willOpen = !menu.classList.contains('open');
-        setOpen(willOpen);
-      });
-    }
 
-    document.addEventListener('click', (event) => {
-      if(!menu.contains(event.target)) setOpen(false);
-    });
-  });
+    const observer =
+        new IntersectionObserver(
+            (entries) => {
+
+                entries.forEach(
+                    (entry) => {
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+                            animateCounter(
+                                entry.target
+                            );
+
+                            observer.unobserve(
+                                entry.target
+                            );
+
+                        }
+
+                    }
+                );
+
+            },
+            {
+                threshold: 0.4
+            }
+        );
+
+
+    counters.forEach(
+        (counter) =>
+            observer.observe(counter)
+    );
+
 });
 
-document.addEventListener('DOMContentLoaded', function(){
-  const counters = document.querySelectorAll('.stat-number[data-count]');
-  if(!counters.length) return;
 
-  const animateCounter = (el) => {
-    const target = parseInt(el.dataset.count, 10);
-    const suffix = el.dataset.suffix || '';
-    const duration = 1500;
-    const start = performance.now();
+// ============================================================
+// HEADER SCROLL
+// ============================================================
 
-    const step = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const value = Math.round(target * progress);
-      el.textContent = value + suffix;
-      if(progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  };
+document.addEventListener('DOMContentLoaded', function () {
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if(entry.isIntersecting){
-        animateCounter(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.4 });
+    const holder =
+        document.querySelector('.holder');
 
-  counters.forEach((counter) => observer.observe(counter));
-});
+    const topBar =
+        document.querySelector('.top');
 
-document.addEventListener('DOMContentLoaded', function(){
-  const holder = document.querySelector('.holder');
-  const topBar = document.querySelector('.top');
-  const spacer = document.querySelector('.holder-spacer');
-  if(!holder || !topBar || !spacer) return;
+    const spacer =
+        document.querySelector('.holder-spacer');
 
-  const onScroll = () => {
-    const scrolledPast = window.scrollY > topBar.offsetHeight;
-    if(scrolledPast){
-      if(!holder.classList.contains('is-pinned')){
-        spacer.style.height = holder.offsetHeight + 'px';
-        holder.classList.add('is-pinned');
-      }
-    } else {
-      holder.classList.remove('is-pinned');
-      spacer.style.height = '0px';
-    }
-  };
 
-  // track scroll direction for shrink behavior
-  let lastY = window.scrollY;
-  const onScrollDirection = () => {
-    const currentY = window.scrollY;
-    if(currentY > lastY && currentY > 60){
-      // scrolling down -> shrink header
-      holder.classList.add('shrink');
-    } else {
-      // scrolling up -> restore header
-      holder.classList.remove('shrink');
-    }
-    lastY = currentY;
-  };
+    if (
+        !holder ||
+        !topBar ||
+        !spacer
+    ) return;
 
-  window.addEventListener('scroll', function(){ onScroll(); onScrollDirection(); }, { passive: true });
-  onScroll();
-});
 
-document.addEventListener('DOMContentLoaded', function(){
-  const popup = document.getElementById('mailingPopup');
-  const form = document.getElementById('mailingForm');
-  const aboutSection = document.querySelector('.about-section');
-  if(!popup || !form || !aboutSection) return;
+    const onScroll = () => {
 
-  const closeBtn = popup.querySelector('.mailing-popup-close');
-  const SUBSCRIBED_KEY = 'lagosSistemaSubscribed';
-  const RESHOW_DELAY = 15000;
-  let reshowTimer = null;
+        const scrolledPast =
+            window.scrollY >
+            topBar.offsetHeight;
 
-  const isSubscribed = () => localStorage.getItem(SUBSCRIBED_KEY) === 'true';
 
-  const openPopup = () => {
-    if(isSubscribed()) return;
-    popup.hidden = false;
-  };
+        if (scrolledPast) {
 
-  const closePopup = () => {
-    popup.hidden = true;
-    if(!isSubscribed()){
-      clearTimeout(reshowTimer);
-      reshowTimer = setTimeout(openPopup, RESHOW_DELAY);
-    }
-  };
+            if (
+                !holder.classList.contains(
+                    'is-pinned'
+                )
+            ) {
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if(entry.isIntersecting) openPopup();
-    });
-  }, { threshold: 0.3 });
-  observer.observe(aboutSection);
+                spacer.style.height =
+                    holder.offsetHeight +
+                    'px';
 
-  closeBtn.addEventListener('click', closePopup);
-  popup.addEventListener('click', (event) => {
-    if(event.target === popup) closePopup();
-  });
+                holder.classList.add(
+                    'is-pinned'
+                );
 
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    localStorage.setItem(SUBSCRIBED_KEY, 'true');
-    clearTimeout(reshowTimer);
-    popup.hidden = true;
-    observer.disconnect();
-  });
-});
+            }
 
-document.addEventListener('DOMContentLoaded', function(){
-  const toggle = document.getElementById('a11yToggle');
-  const panel = document.getElementById('a11yPanel');
-  const closeBtn = document.getElementById('a11yPanelClose');
-  if(!toggle || !panel) return;
+        } else {
 
-  const openPanel = () => {
-    panel.classList.add('open');
-    toggle.setAttribute('aria-expanded', 'true');
-  };
-  const closePanel = () => {
-    panel.classList.remove('open');
-    toggle.setAttribute('aria-expanded', 'false');
-  };
+            holder.classList.remove(
+                'is-pinned'
+            );
 
-  toggle.addEventListener('click', function(){
-    if(panel.classList.contains('open')) closePanel();
-    else openPanel();
-  });
-  closeBtn && closeBtn.addEventListener('click', closePanel);
-  document.addEventListener('click', function(event){
-    if(panel.classList.contains('open') && !panel.contains(event.target) && event.target !== toggle && !toggle.contains(event.target)){
-      closePanel();
-    }
-  });
-  document.addEventListener('keydown', function(event){
-    if(event.key === 'Escape') closePanel();
-  });
+            spacer.style.height =
+                '0px';
 
-  const body = document.body;
-  const TEXT_LEVEL_CLASSES = ['', 'a11y-text-lg', 'a11y-text-xl'];
-  const TOGGLE_KEYS = ['contrast', 'grayscale', 'underline', 'spacing', 'motion'];
-  const TOGGLE_CLASSES = {
-    contrast: 'a11y-contrast',
-    grayscale: 'a11y-grayscale',
-    underline: 'a11y-underline',
-    spacing: 'a11y-spacing',
-    motion: 'a11y-reduce-motion'
-  };
-  const toggleBtns = {};
-  TOGGLE_KEYS.forEach((key) => { toggleBtns[key] = panel.querySelector('[data-a11y="' + key + '"]'); });
-
-  let textLevel = parseInt(localStorage.getItem('a11yTextLevel') || '0', 10) || 0;
-  const toggleState = {};
-  TOGGLE_KEYS.forEach((key) => { toggleState[key] = localStorage.getItem('a11y_' + key) === 'true'; });
-
-  const applyState = () => {
-    TEXT_LEVEL_CLASSES.forEach((cls) => { if(cls) body.classList.remove(cls); });
-    if(TEXT_LEVEL_CLASSES[textLevel]) body.classList.add(TEXT_LEVEL_CLASSES[textLevel]);
-    localStorage.setItem('a11yTextLevel', String(textLevel));
-
-    TOGGLE_KEYS.forEach((key) => {
-      body.classList.toggle(TOGGLE_CLASSES[key], toggleState[key]);
-      if(toggleBtns[key]) toggleBtns[key].setAttribute('aria-pressed', String(toggleState[key]));
-      localStorage.setItem('a11y_' + key, String(toggleState[key]));
-    });
-
-    if(toggleState.motion){
-      document.querySelectorAll('.carousel').forEach((el) => {
-        if(window.bootstrap && window.bootstrap.Carousel){
-          const inst = window.bootstrap.Carousel.getOrCreateInstance(el);
-          inst.pause();
         }
-      });
-    }
-  };
 
-  // Read Page Aloud -- uses the browser's built-in speech synthesis, no external
-  // service or API key needed. Reads the page title plus the visible content
-  // sections (skips nav/footer chrome).
-  const readBtn = panel.querySelector('[data-a11y="read-aloud"]');
-  const getPageText = () => {
-    const nodes = document.querySelectorAll('.page-hero, .content-section, .section, article');
-    let text = document.title + '. ';
-    nodes.forEach((n) => { text += n.innerText + '. '; });
-    return text;
-  };
-  const stopReading = () => {
-    if('speechSynthesis' in window) window.speechSynthesis.cancel();
-    if(readBtn) readBtn.setAttribute('aria-pressed', 'false');
-  };
-  if(readBtn){
-    readBtn.addEventListener('click', function(){
-      if(!('speechSynthesis' in window)){
-        alert('Sorry, your browser does not support reading pages aloud.');
-        return;
-      }
-      if(readBtn.getAttribute('aria-pressed') === 'true'){
-        stopReading();
-        return;
-      }
-      const utterance = new SpeechSynthesisUtterance(getPageText());
-      utterance.rate = 0.95;
-      utterance.onend = stopReading;
-      utterance.onerror = stopReading;
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
-      readBtn.setAttribute('aria-pressed', 'true');
-    });
-  }
+    };
 
-  panel.addEventListener('click', function(event){
-    const btn = event.target.closest('[data-a11y]');
-    if(!btn) return;
 
-    switch(btn.dataset.a11y){
-      case 'font-inc':
-        textLevel = Math.min(textLevel + 1, TEXT_LEVEL_CLASSES.length - 1);
-        applyState();
-        break;
-      case 'font-dec':
-        textLevel = Math.max(textLevel - 1, 0);
-        applyState();
-        break;
-      case 'contrast':
-      case 'grayscale':
-      case 'underline':
-      case 'spacing':
-      case 'motion':
-        toggleState[btn.dataset.a11y] = !toggleState[btn.dataset.a11y];
-        applyState();
-        break;
-      case 'reset':
-        textLevel = 0;
-        TOGGLE_KEYS.forEach((key) => { toggleState[key] = false; });
-        stopReading();
-        applyState();
-        break;
-    }
-  });
+    let lastY =
+        window.scrollY;
 
-  applyState();
+
+    const onScrollDirection = () => {
+
+        const currentY =
+            window.scrollY;
+
+
+        if (
+            currentY > lastY &&
+            currentY > 60
+        ) {
+
+            holder.classList.add(
+                'shrink'
+            );
+
+        } else {
+
+            holder.classList.remove(
+                'shrink'
+            );
+
+        }
+
+
+        lastY = currentY;
+
+    };
+
+
+    window.addEventListener(
+        'scroll',
+        function () {
+
+            onScroll();
+
+            onScrollDirection();
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    onScroll();
+
 });
 
-document.addEventListener('DOMContentLoaded', function(){
-  // Donate page: the amount chips and the free-text amount field are
-  // separate inputs (only the text field is actually named "amount" and
-  // submitted), so picking a chip needs to copy its value into the field.
-  const donateForm = document.querySelector('.donate-form');
-  if(!donateForm) return;
 
-  const presets = donateForm.querySelectorAll('input[name="amount-preset"]');
-  const amountField = donateForm.querySelector('input[name="amount"]');
-  if(!presets.length || !amountField) return;
+// ============================================================
+// MAILING POPUP
+// ============================================================
 
-  // When frequency changes, update the amount presets and min accordingly
-  const freqOnce = donateForm.querySelector('#freq-once');
-  const freqMonthly = donateForm.querySelector('#freq-monthly');
-  const updateForFrequency = () => {
-    const isMonthly = freqMonthly && freqMonthly.checked;
-    // update displayed labels and the amountField min
-    presets.forEach((preset) => {
-      const onetime = preset.dataset.onetime;
-      const monthly = preset.dataset.monthly;
-      if(preset.value === 'custom') return;
-      preset.value = isMonthly ? monthly : onetime;
-      const label = donateForm.querySelector('label[for="' + preset.id + '"]');
-      if(label){ label.textContent = '₦' + Number(preset.value).toLocaleString(); }
-    });
-    amountField.min = isMonthly ? 50000 : 100000;
-    // re-initialize checked preset value into field
-    const checked = donateForm.querySelector('input[name="amount-preset"]:checked');
-    if(checked && checked.value !== 'custom') amountField.value = checked.value;
-  };
-  if(freqOnce && freqMonthly){
-    freqOnce.addEventListener('change', updateForFrequency);
-    freqMonthly.addEventListener('change', updateForFrequency);
-    updateForFrequency();
-  }
+document.addEventListener('DOMContentLoaded', function () {
 
-  presets.forEach(function(preset){
-    preset.addEventListener('change', function(){
-      if(preset.value === 'custom'){
-        amountField.value = '';
-        amountField.focus();
-      } else {
-        amountField.value = preset.value;
-      }
-    });
-  });
-  amountField.addEventListener('input', function(){
-    const matchingPreset = donateForm.querySelector('input[name="amount-preset"][value="' + amountField.value + '"]');
-    presets.forEach(function(preset){ preset.checked = false; });
-    if(matchingPreset) matchingPreset.checked = true;
-  });
+    const popup =
+        document.getElementById(
+            'mailingPopup'
+        );
 
-  // Initialize with the default-checked preset's value
-  const checkedPreset = donateForm.querySelector('input[name="amount-preset"]:checked');
-  if(checkedPreset && checkedPreset.value !== 'custom') amountField.value = checkedPreset.value;
+    const form =
+        document.getElementById(
+            'mailingForm'
+        );
+
+    const aboutSection =
+        document.querySelector(
+            '.about-section'
+        );
+
+
+    if (
+        !popup ||
+        !form ||
+        !aboutSection
+    ) return;
+
+
+    const closeBtn =
+        popup.querySelector(
+            '.mailing-popup-close'
+        );
+
+
+    const SUBSCRIBED_KEY =
+        'lagosSistemaSubscribed';
+
+
+    const RESHOW_DELAY =
+        15000;
+
+
+    let reshowTimer = null;
+
+
+    const isSubscribed = () =>
+        localStorage.getItem(
+            SUBSCRIBED_KEY
+        ) === 'true';
+
+
+    const openPopup = () => {
+
+        if (
+            isSubscribed()
+        ) return;
+
+
+        popup.hidden = false;
+
+    };
+
+
+    const closePopup = () => {
+
+        popup.hidden = true;
+
+
+        if (
+            !isSubscribed()
+        ) {
+
+            clearTimeout(
+                reshowTimer
+            );
+
+
+            reshowTimer =
+                setTimeout(
+                    openPopup,
+                    RESHOW_DELAY
+                );
+
+        }
+
+    };
+
+
+    const observer =
+        new IntersectionObserver(
+            (entries) => {
+
+                entries.forEach(
+                    (entry) => {
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+                            openPopup();
+
+                        }
+
+                    }
+                );
+
+            },
+            {
+                threshold: 0.3
+            }
+        );
+
+
+    observer.observe(
+        aboutSection
+    );
+
+
+    if (closeBtn) {
+
+        closeBtn.addEventListener(
+            'click',
+            closePopup
+        );
+
+    }
+
+
+    popup.addEventListener(
+        'click',
+        (event) => {
+
+            if (
+                event.target === popup
+            ) {
+
+                closePopup();
+
+            }
+
+        }
+    );
+
+
+    form.addEventListener(
+        'submit',
+        (event) => {
+
+            event.preventDefault();
+
+            localStorage.setItem(
+                SUBSCRIBED_KEY,
+                'true'
+            );
+
+
+            clearTimeout(
+                reshowTimer
+            );
+
+
+            popup.hidden = true;
+
+
+            observer.disconnect();
+
+        }
+    );
+
 });
+
+
+// ============================================================
+// ACCESSIBILITY
+// ============================================================
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const toggle =
+        document.getElementById(
+            'a11yToggle'
+        );
+
+    const panel =
+        document.getElementById(
+            'a11yPanel'
+        );
+
+    const closeBtn =
+        document.getElementById(
+            'a11yPanelClose'
+        );
+
+
+    if (!toggle || !panel) return;
+
+
+    const openPanel = () => {
+
+        panel.classList.add(
+            'open'
+        );
+
+        toggle.setAttribute(
+            'aria-expanded',
+            'true'
+        );
+
+    };
+
+
+    const closePanel = () => {
+
+        panel.classList.remove(
+            'open'
+        );
+
+        toggle.setAttribute(
+            'aria-expanded',
+            'false'
+        );
+
+    };
+
+
+    toggle.addEventListener(
+        'click',
+        function () {
+
+            if (
+                panel.classList.contains(
+                    'open'
+                )
+            ) {
+
+                closePanel();
+
+            } else {
+
+                openPanel();
+
+            }
+
+        }
+    );
+
+
+    if (closeBtn) {
+
+        closeBtn.addEventListener(
+            'click',
+            closePanel
+        );
+
+    }
+
+
+    document.addEventListener(
+        'click',
+        function (event) {
+
+            if (
+                panel.classList.contains(
+                    'open'
+                ) &&
+                !panel.contains(
+                    event.target
+                ) &&
+                event.target !== toggle &&
+                !toggle.contains(
+                    event.target
+                )
+            ) {
+
+                closePanel();
+
+            }
+
+        }
+    );
+
+
+    document.addEventListener(
+        'keydown',
+        function (event) {
+
+            if (
+                event.key === 'Escape'
+            ) {
+
+                closePanel();
+
+            }
+
+        }
+    );
+
+
+    const body =
+        document.body;
+
+
+    const TEXT_LEVEL_CLASSES = [
+
+        '',
+
+        'a11y-text-lg',
+
+        'a11y-text-xl'
+
+    ];
+
+
+    const TOGGLE_KEYS = [
+
+        'contrast',
+
+        'grayscale',
+
+        'underline',
+
+        'spacing',
+
+        'motion'
+
+    ];
+
+
+    const TOGGLE_CLASSES = {
+
+        contrast:
+            'a11y-contrast',
+
+        grayscale:
+            'a11y-grayscale',
+
+        underline:
+            'a11y-underline',
+
+        spacing:
+            'a11y-spacing',
+
+        motion:
+            'a11y-reduce-motion'
+
+    };
+
+
+    const toggleBtns = {};
+
+
+    TOGGLE_KEYS.forEach(
+        (key) => {
+
+            toggleBtns[key] =
+                panel.querySelector(
+                    '[data-a11y="' +
+                    key +
+                    '"]'
+                );
+
+        }
+    );
+
+
+    let textLevel =
+        parseInt(
+            localStorage.getItem(
+                'a11yTextLevel'
+            ) || '0',
+            10
+        ) || 0;
+
+
+    const toggleState = {};
+
+
+    TOGGLE_KEYS.forEach(
+        (key) => {
+
+            toggleState[key] =
+                localStorage.getItem(
+                    'a11y_' +
+                    key
+                ) === 'true';
+
+        }
+    );
+
+
+    const applyState = () => {
+
+        TEXT_LEVEL_CLASSES.forEach(
+            (cls) => {
+
+                if (cls) {
+
+                    body.classList.remove(
+                        cls
+                    );
+
+                }
+
+            }
+        );
+
+
+        if (
+            TEXT_LEVEL_CLASSES[
+                textLevel
+            ]
+        ) {
+
+            body.classList.add(
+                TEXT_LEVEL_CLASSES[
+                    textLevel
+                ]
+            );
+
+        }
+
+
+        localStorage.setItem(
+            'a11yTextLevel',
+            String(textLevel)
+        );
+
+
+        TOGGLE_KEYS.forEach(
+            (key) => {
+
+                body.classList.toggle(
+                    TOGGLE_CLASSES[key],
+                    toggleState[key]
+                );
+
+
+                if (
+                    toggleBtns[key]
+                ) {
+
+                    toggleBtns[key]
+                        .setAttribute(
+                            'aria-pressed',
+                            String(
+                                toggleState[key]
+                            )
+                        );
+
+                }
+
+
+                localStorage.setItem(
+                    'a11y_' + key,
+                    String(
+                        toggleState[key]
+                    )
+                );
+
+            }
+        );
+
+
+        if (
+            toggleState.motion
+        ) {
+
+            document
+                .querySelectorAll(
+                    '.carousel'
+                )
+                .forEach((el) => {
+
+                    if (
+                        window.bootstrap &&
+                        window.bootstrap.Carousel
+                    ) {
+
+                        const inst =
+                            window.bootstrap.Carousel
+                                .getOrCreateInstance(
+                                    el
+                                );
+
+                        inst.pause();
+
+                    }
+
+                });
+
+        }
+
+    };
+
+
+    // ========================================================
+    // READ ALOUD
+    // ========================================================
+
+    const readBtn =
+        panel.querySelector(
+            '[data-a11y="read-aloud"]'
+        );
+
+
+    const getPageText = () => {
+
+        const nodes =
+            document.querySelectorAll(
+                '.page-hero, .content-section, .section, article'
+            );
+
+
+        let text =
+            document.title +
+            '. ';
+
+
+        nodes.forEach(
+            (n) => {
+
+                text +=
+                    n.innerText +
+                    '. ';
+
+            }
+        );
+
+
+        return text;
+
+    };
+
+
+    const stopReading = () => {
+
+        if (
+            'speechSynthesis' in window
+        ) {
+
+            window.speechSynthesis.cancel();
+
+        }
+
+
+        if (readBtn) {
+
+            readBtn.setAttribute(
+                'aria-pressed',
+                'false'
+            );
+
+        }
+
+    };
+
+
+    if (readBtn) {
+
+        readBtn.addEventListener(
+            'click',
+            function () {
+
+                if (
+                    !(
+                        'speechSynthesis'
+                        in window
+                    )
+                ) {
+
+                    alert(
+                        'Sorry, your browser does not support reading pages aloud.'
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    readBtn.getAttribute(
+                        'aria-pressed'
+                    ) === 'true'
+                ) {
+
+                    stopReading();
+
+                    return;
+
+                }
+
+
+                const utterance =
+                    new SpeechSynthesisUtterance(
+                        getPageText()
+                    );
+
+
+                utterance.rate =
+                    0.95;
+
+
+                utterance.onend =
+                    stopReading;
+
+
+                utterance.onerror =
+                    stopReading;
+
+
+                window.speechSynthesis.cancel();
+
+                window.speechSynthesis.speak(
+                    utterance
+                );
+
+
+                readBtn.setAttribute(
+                    'aria-pressed',
+                    'true'
+                );
+
+            }
+        );
+
+    }
+
+
+    panel.addEventListener(
+        'click',
+        function (event) {
+
+            const btn =
+                event.target.closest(
+                    '[data-a11y]'
+                );
+
+
+            if (!btn) return;
+
+
+            switch (
+                btn.dataset.a11y
+            ) {
+
+                case 'font-inc':
+
+                    textLevel =
+                        Math.min(
+                            textLevel + 1,
+                            TEXT_LEVEL_CLASSES.length - 1
+                        );
+
+                    applyState();
+
+                    break;
+
+
+                case 'font-dec':
+
+                    textLevel =
+                        Math.max(
+                            textLevel - 1,
+                            0
+                        );
+
+                    applyState();
+
+                    break;
+
+
+                case 'contrast':
+
+                case 'grayscale':
+
+                case 'underline':
+
+                case 'spacing':
+
+                case 'motion':
+
+                    toggleState[
+                        btn.dataset.a11y
+                    ] =
+                        !toggleState[
+                            btn.dataset.a11y
+                        ];
+
+                    applyState();
+
+                    break;
+
+
+                case 'reset':
+
+                    textLevel = 0;
+
+
+                    TOGGLE_KEYS.forEach(
+                        (key) => {
+
+                            toggleState[key] =
+                                false;
+
+                        }
+                    );
+
+
+                    stopReading();
+
+                    applyState();
+
+                    break;
+
+            }
+
+        }
+    );
+
+
+    applyState();
+
+});
+
+
+// ============================================================
+// DONATION SYSTEM
+//
+// THIS IS THE IMPORTANT PART.
+//
+// Money:
+// form → POST /donate
+//      → server creates Stripe Checkout
+//      → server returns checkout_url
+//      → browser redirects to Stripe
+//      → customer pays
+//      → Stripe redirects back
+//      → frontend verifies payment
+//      → success message
+//
+// ============================================================
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+        const donateForm =
+            document.querySelector(
+                '.donate-form'
+            );
+
+
+        if (!donateForm) return;
+
+
+        const presets =
+            donateForm.querySelectorAll(
+                'input[name="amount-preset"]'
+            );
+
+
+        const amountField =
+            donateForm.querySelector(
+                'input[name="amount"]'
+            );
+
+
+        const freqOnce =
+            donateForm.querySelector(
+                '#freq-once'
+            );
+
+
+        const freqMonthly =
+            donateForm.querySelector(
+                '#freq-monthly'
+            );
+
+
+        // ====================================================
+        // AMOUNT PRESETS
+        // ====================================================
+
+        const updateForFrequency = () => {
+
+            const isMonthly =
+                freqMonthly &&
+                freqMonthly.checked;
+
+
+            presets.forEach(
+                (preset) => {
+
+                    const onetime =
+                        preset.dataset.onetime;
+
+
+                    const monthly =
+                        preset.dataset.monthly;
+
+
+                    if (
+                        preset.value ===
+                        'custom'
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const newValue =
+                        isMonthly
+                            ? monthly
+                            : onetime;
+
+
+                    if (
+                        newValue ===
+                        undefined
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    preset.value =
+                        String(
+                            newValue
+                        );
+
+
+                    const label =
+                        donateForm.querySelector(
+                            'label[for="' +
+                            preset.id +
+                            '"]'
+                        );
+
+
+                    if (label) {
+
+                        label.textContent =
+                            '₦' +
+                            Number(
+                                newValue
+                            ).toLocaleString(
+                                'en-NG'
+                            );
+
+                    }
+
+                }
+            );
+
+
+            if (amountField) {
+
+                amountField.min =
+                    isMonthly
+                        ? '50000'
+                        : '100000';
+
+            }
+
+
+            const checked =
+                donateForm.querySelector(
+                    'input[name="amount-preset"]:checked'
+                );
+
+
+            if (
+                checked &&
+                checked.value !==
+                'custom'
+            ) {
+
+                amountField.value =
+                    checked.value;
+
+            }
+
+        };
+
+
+        if (
+            freqOnce &&
+            freqMonthly
+        ) {
+
+            freqOnce.addEventListener(
+                'change',
+                updateForFrequency
+            );
+
+
+            freqMonthly.addEventListener(
+                'change',
+                updateForFrequency
+            );
+
+
+            updateForFrequency();
+
+        }
+
+
+        presets.forEach(
+            (preset) => {
+
+                preset.addEventListener(
+                    'change',
+                    function () {
+
+                        if (
+                            preset.value ===
+                            'custom'
+                        ) {
+
+                            amountField.value =
+                                '';
+
+                            amountField.focus();
+
+                        } else {
+
+                            amountField.value =
+                                preset.value;
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+        if (amountField) {
+
+            amountField.addEventListener(
+                'input',
+                function () {
+
+                    const value =
+                        amountField.value
+                            .replace(
+                                /[₦,\s]/g,
+                                ''
+                            );
+
+
+                    amountField.value =
+                        value;
+
+
+                    presets.forEach(
+                        (preset) => {
+
+                            preset.checked =
+                                false;
+
+                        }
+                    );
+
+
+                    const matchingPreset =
+                        Array.from(
+                            presets
+                        ).find(
+                            (preset) =>
+                                preset.value ===
+                                value
+                        );
+
+
+                    if (
+                        matchingPreset
+                    ) {
+
+                        matchingPreset.checked =
+                            true;
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        // ====================================================
+        // INITIAL AMOUNT
+        // ====================================================
+
+        const checkedPreset =
+            donateForm.querySelector(
+                'input[name="amount-preset"]:checked'
+            );
+
+
+        if (
+            checkedPreset &&
+            checkedPreset.value !==
+            'custom' &&
+            amountField
+        ) {
+
+            amountField.value =
+                checkedPreset.value;
+
+        }
+
+
+        // ====================================================
+        // PAYMENT RESULT
+        // ====================================================
+
+        handleDonationResult();
+
+
+        // ====================================================
+        // FORM SUBMISSION
+        // ====================================================
+
+        donateForm.addEventListener(
+            'submit',
+            async function (event) {
+
+                event.preventDefault();
+
+
+                // Prevent double-click
+                if (
+                    donateForm.dataset.processing ===
+                    'true'
+                ) {
+
+                    return;
+
+                }
+
+
+                donateForm.dataset.processing =
+                    'true';
+
+
+                const submitButton =
+                    donateForm.querySelector(
+                        'button[type="submit"], input[type="submit"]'
+                    );
+
+
+                const originalButtonText =
+                    submitButton
+                        ? (
+                            submitButton.tagName ===
+                            'INPUT'
+                                ? submitButton.value
+                                : submitButton.textContent
+                        )
+                        : 'Donate';
+
+
+                if (submitButton) {
+
+                    if (
+                        submitButton.tagName ===
+                        'INPUT'
+                    ) {
+
+                        submitButton.value =
+                            'Connecting to secure checkout...';
+
+                    } else {
+
+                        submitButton.textContent =
+                            'Connecting to secure checkout...';
+
+                    }
+
+
+                    submitButton.disabled =
+                        true;
+
+                }
+
+
+                try {
+
+                    // ==================================================
+                    // GET FORM VALUES
+                    // ==================================================
+
+                    const formData =
+                        new FormData(
+                            donateForm
+                        );
+
+
+                    const name =
+                        String(
+                            formData.get(
+                                'name'
+                            ) || ''
+                        ).trim();
+
+
+                    const email =
+                        String(
+                            formData.get(
+                                'email'
+                            ) || ''
+                        ).trim()
+                            .toLowerCase();
+
+
+                    const frequency =
+                        String(
+                            formData.get(
+                                'frequency'
+                            ) ||
+                            'one-time'
+                        ).trim();
+
+
+                    let amount =
+                        String(
+                            formData.get(
+                                'amount'
+                            ) || ''
+                        );
+
+
+                    amount =
+                        amount
+                            .replace(
+                                /[₦,\s]/g,
+                                ''
+                            )
+                            .trim();
+
+
+                    // ==================================================
+                    // GET INSTRUMENTS
+                    // ==================================================
+
+                    const instruments =
+                        [];
+
+
+                    donateForm
+                        .querySelectorAll(
+                            'input[name="instruments"]:checked, select[name="instruments"] option:checked'
+                        )
+                        .forEach(
+                            (input) => {
+
+                                const value =
+                                    String(
+                                        input.value ||
+                                        ''
+                                    ).trim();
+
+
+                                if (value) {
+
+                                    instruments.push(
+                                        value
+                                    );
+
+                                }
+
+                            }
+                        );
+
+
+                    // ==================================================
+                    // VALIDATION
+                    // ==================================================
+
+                    if (!name) {
+
+                        throw new Error(
+                            'Please enter your full name.'
+                        );
+
+                    }
+
+
+                    if (!email) {
+
+                        throw new Error(
+                            'Please enter your email address.'
+                        );
+
+                    }
+
+
+                    const numericAmount =
+                        Number(
+                            amount
+                        );
+
+
+                    const hasAmount =
+                        Number.isFinite(
+                            numericAmount
+                        ) &&
+                        numericAmount > 0;
+
+
+                    const hasInstrument =
+                        instruments.length >
+                        0;
+
+
+                    if (
+                        !hasAmount &&
+                        !hasInstrument
+                    ) {
+
+                        throw new Error(
+                            'Please choose a donation amount or select an instrument.'
+                        );
+
+                    }
+
+
+                    // ==================================================
+                    // MONTHLY
+                    // ==================================================
+
+                    if (
+                        frequency ===
+                        'monthly'
+                    ) {
+
+                        throw new Error(
+                            'Monthly donations are not configured yet. Please select One-Time.'
+                        );
+
+                    }
+
+
+                    // ==================================================
+                    // BUILD REQUEST
+                    // ==================================================
+
+                    const payload = {
+
+                        name,
+
+                        email,
+
+                        amount:
+                            hasAmount
+                                ? String(
+                                    numericAmount
+                                )
+                                : '',
+
+                        frequency,
+
+                        instruments
+
+                    };
+
+
+                    console.log(
+                        'Sending donation:',
+                        payload
+                    );
+
+
+                    // ==================================================
+                    // SEND TO NODE SERVER
+                    // ==================================================
+
+                    const response =
+                        await fetch(
+                            '/donate',
+                            {
+
+                                method:
+                                    'POST',
+
+                                headers: {
+
+                                    'Content-Type':
+                                        'application/json',
+
+                                    'Accept':
+                                        'application/json'
+
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        payload
+                                    )
+
+                            }
+                        );
+
+
+                    // ==================================================
+                    // READ RESPONSE SAFELY
+                    // ==================================================
+
+                    const responseText =
+                        await response.text();
+
+
+                    console.log(
+                        'Donation server status:',
+                        response.status
+                    );
+
+
+                    console.log(
+                        'Donation server response:',
+                        responseText
+                    );
+
+
+                    let data;
+
+
+                    try {
+
+                        data =
+                            JSON.parse(
+                                responseText
+                            );
+
+                    } catch (parseError) {
+
+                        console.error(
+                            'Server returned non-JSON:',
+                            responseText
+                        );
+
+
+                        throw new Error(
+                            'The donation server returned an invalid response. Please check that your website is connected to the Node server.'
+                        );
+
+                    }
+
+
+                    // ==================================================
+                    // SERVER ERROR
+                    // ==================================================
+
+                    if (
+                        !response.ok ||
+                        data.status ===
+                        'error'
+                    ) {
+
+                        throw new Error(
+                            data.message ||
+                            'Unable to process your donation.'
+                        );
+
+                    }
+
+
+                    // ==================================================
+                    // PAYMENT DONATION
+                    //
+                    // THIS IS THE CRITICAL CHECK.
+                    //
+                    // We DO NOT show success here.
+                    //
+                    // We redirect to Stripe first.
+                    // ==================================================
+
+                    if (
+                        data.type ===
+                        'payment'
+                    ) {
+
+                        if (
+                            !data.checkout_url
+                        ) {
+
+                            throw new Error(
+                                'Stripe Checkout URL was not returned by the server.'
+                            );
+
+                        }
+
+
+                        console.log(
+                            'Redirecting to Stripe Checkout:',
+                            data.checkout_url
+                        );
+
+
+                        // =================================================
+                        // REDIRECT TO STRIPE
+                        // =================================================
+
+                        window.location.assign(
+                            data.checkout_url
+                        );
+
+
+                        return;
+
+                    }
+
+
+                    // ==================================================
+                    // INSTRUMENT-ONLY DONATION
+                    //
+                    // This one does NOT require Stripe.
+                    // ==================================================
+
+                    if (
+                        data.type ===
+                        'instrument'
+                    ) {
+
+                        showDonationMessage(
+                            data.message ||
+                            'Thank you! Your instrument donation details have been received.',
+                            'success'
+                        );
+
+
+                        donateForm.reset();
+
+
+                        return;
+
+                    }
+
+
+                    throw new Error(
+                        'Unexpected response from the donation server.'
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        'Donation submission error:',
+                        error
+                    );
+
+
+                    showDonationMessage(
+                        error.message ||
+                        'Something went wrong while processing your donation.',
+                        'error'
+                    );
+
+
+                } finally {
+
+                    donateForm.dataset.processing =
+                        'false';
+
+
+                    if (submitButton) {
+
+                        submitButton.disabled =
+                            false;
+
+
+                        if (
+                            submitButton.tagName ===
+                            'INPUT'
+                        ) {
+
+                            submitButton.value =
+                                originalButtonText;
+
+                        } else {
+
+                            submitButton.textContent =
+                                originalButtonText;
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        // ============================================================
+        // SHOW DONATION MESSAGE
+        // ============================================================
+
+        function showDonationMessage(
+            message,
+            type
+        ) {
+
+            let box =
+                document.getElementById(
+                    'donationMessage'
+                );
+
+
+            if (!box) {
+
+                box =
+                    document.createElement(
+                        'div'
+                    );
+
+
+                box.id =
+                    'donationMessage';
+
+
+                donateForm.parentNode.insertBefore(
+                    box,
+                    donateForm
+                );
+
+            }
+
+
+            box.textContent =
+                message;
+
+
+            box.className =
+                'donation-message ' +
+                (
+                    type === 'error'
+                        ? 'error'
+                        : 'success'
+                );
+
+
+            box.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+
+        }
+
+
+        // ============================================================
+        // HANDLE STRIPE RETURN
+        // ============================================================
+
+        async function handleDonationResult() {
+
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+
+            const payment =
+                params.get(
+                    'payment'
+                );
+
+
+            const sessionId =
+                params.get(
+                    'session_id'
+                );
+
+
+            // ========================================================
+            // CANCELLED
+            // ========================================================
+
+            if (
+                payment ===
+                'cancelled'
+            ) {
+
+                showDonationMessage(
+                    'Your payment was cancelled. No donation was charged.',
+                    'error'
+                );
+
+
+                cleanDonationUrl();
+
+                return;
+
+            }
+
+
+            // ========================================================
+            // SUCCESS
+            // ========================================================
+
+            if (
+                payment !==
+                'success' ||
+                !sessionId
+            ) {
+
+                return;
+
+            }
+
+
+            showDonationMessage(
+                'Verifying your payment...',
+                'success'
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        '/api/donation-status?session_id=' +
+                        encodeURIComponent(
+                            sessionId
+                        ),
+                        {
+                            headers: {
+                                'Accept':
+                                    'application/json'
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    data.status !==
+                    'success'
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        'Unable to verify payment.'
+                    );
+
+                }
+
+
+                if (
+                    data.paid ===
+                    true
+                ) {
+
+                    showDonationMessage(
+                        'Thank you! Your donation payment was received successfully.',
+                        'success'
+                    );
+
+                } else {
+
+                    showDonationMessage(
+                        'We returned from Stripe, but the payment has not been confirmed yet. Please check your email or contact us if needed.',
+                        'error'
+                    );
+
+                }
+
+
+                cleanDonationUrl();
+
+
+            } catch (error) {
+
+                console.error(
+                    'Payment verification error:',
+                    error
+                );
+
+
+                showDonationMessage(
+                    'We could not verify your payment automatically. Please contact us if your account was charged.',
+                    'error'
+                );
+
+            }
+
+        }
+
+
+        // ============================================================
+        // REMOVE SESSION ID FROM ADDRESS BAR
+        // ============================================================
+
+        function cleanDonationUrl() {
+
+            try {
+
+                const cleanUrl =
+                    window.location.origin +
+                    window.location.pathname;
+
+
+                window.history.replaceState(
+                    {},
+                    document.title,
+                    cleanUrl
+                );
+
+            } catch (_) {
+
+                // Ignore browser history errors.
+            }
+
+        }
+
+    }
+);

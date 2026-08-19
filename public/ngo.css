@@ -129,6 +129,23 @@ a{
 }
 .nav-item .dropdown a:hover{ background: rgba(255,255,255,0.04); color: #fff; }
 
+/* Compatibility for pages that still use a plain Partners list item. */
+.nav-item:has(> .dropdown) {
+    font-weight: 700;
+    color: #073d1f;
+}
+.nav-item:has(> .dropdown) > .nav-link,
+.nav-item:has(> .dropdown) > .partners-toggle {
+    font-weight: 700;
+    color: #073d1f;
+    cursor: pointer;
+}
+.nav-item:has(> .dropdown):hover > .dropdown,
+.nav-item:has(> .dropdown):focus-within > .dropdown,
+.nav-item:has(> .dropdown).open > .dropdown {
+    display: block;
+}
+
 /* keep dropdown open while pointer is over the trigger or menu */
 @media (hover: hover) and (min-width: 768px) {
     .nav-item.dropdown-holder:hover > .dropdown,
