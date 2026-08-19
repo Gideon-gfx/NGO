@@ -1191,10 +1191,19 @@
             ================================================== -->
 
             <div
-                class="form-success"
+                class="form-success donation-success-card"
                 id="donate-success"
+                role="status"
+                aria-live="polite"
                 hidden
             >
+
+                <button
+                    type="button"
+                    class="donation-success-close"
+                    id="donate-success-close"
+                    aria-label="Close payment confirmation"
+                >&times;</button>
 
                 <span class="icon">
 
@@ -1227,6 +1236,30 @@
 
                 </p>
 
+            </div>
+
+            <div
+                class="donation-failure-card"
+                id="donate-failure"
+                role="alert"
+                aria-live="assertive"
+                hidden
+            >
+                <button
+                    type="button"
+                    class="donation-success-close"
+                    id="donate-failure-close"
+                    aria-label="Close payment message"
+                >&times;</button>
+                <span class="icon donation-failure-icon" aria-hidden="true">!</span>
+                <h4 id="donate-failure-title">Your donation was not completed</h4>
+                <p id="donate-failure-message">
+                    No donation was charged. Every amount makes a meaningful difference,
+                    so please try again when you are ready. Any amount is welcome.
+                </p>
+                <button type="button" class="donation-retry-button" id="donate-retry">
+                    Try Again
+                </button>
             </div>
 
 

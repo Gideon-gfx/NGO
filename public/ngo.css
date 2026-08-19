@@ -131,13 +131,13 @@ a{
 
 /* Compatibility for pages that still use a plain Partners list item. */
 .nav-item:has(> .dropdown) {
-    font-weight: 700;
-    color: #073d1f;
+    font-weight: 600;
+    color: var(--muted);
 }
 .nav-item:has(> .dropdown) > .nav-link,
 .nav-item:has(> .dropdown) > .partners-toggle {
-    font-weight: 700;
-    color: #073d1f;
+    font-weight: 600;
+    color: var(--muted);
     cursor: pointer;
 }
 .nav-item:has(> .dropdown):hover > .dropdown,
@@ -176,16 +176,28 @@ a{
     .nav-item.dropdown-holder.open > .dropdown {
         display: block;
     }
+
+    .navbar-collapse.show .nav-item .dropdown {
+        display: none !important;
+    }
+
+    .navbar-collapse.show .nav-item.open .dropdown,
+    .navbar-collapse.show .nav-item.dropdown-holder.open .dropdown {
+        display: block !important;
+    }
 }
 
 /* When the collapsed navbar is open on small screens, reveal any dropdowns inline */
 .navbar-collapse.show .nav-item .dropdown {
-    display: block;
+    display: none;
     position: static;
     transform: none;
     box-shadow: none;
     background: transparent;
     padding: 0;
+}
+.navbar-collapse.show .nav-item.open .dropdown {
+    display: block;
 }
 
 /* Ensure navbar is above carousel layers when pinned */
@@ -1750,6 +1762,96 @@ body.a11y-reduce-motion *{
     background: var(--bg-alt);
     padding: 36px;
     border-radius: 10px;
+}
+.donation-success-card{
+    position: relative;
+    margin: 24px 0;
+    padding: 36px 48px;
+    border: 1px solid #b7d8bf;
+    border-radius: 10px;
+    background: #f3fbf5;
+    color: #123d20;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(18, 61, 32, 0.1);
+}
+.donation-success-card .icon{
+    display: inline-flex;
+    color: #16803c;
+}
+.donation-success-card h4{
+    margin: 14px 0 8px;
+    color: #123d20;
+    font-weight: 700;
+}
+.donation-success-card p{
+    margin: 0;
+    color: #31583b;
+}
+.donation-success-close{
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #31583b;
+    font-size: 25px;
+    line-height: 1;
+    cursor: pointer;
+}
+.donation-success-close:hover,
+.donation-success-close:focus-visible{
+    background: #dcefe0;
+    color: #123d20;
+}
+.donation-failure-card{
+    position: relative;
+    margin: 24px 0;
+    padding: 36px 48px;
+    border: 1px solid #e5c99b;
+    border-radius: 10px;
+    background: #fffaf1;
+    color: #5b3a12;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(91, 58, 18, 0.1);
+}
+.donation-failure-icon{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #b97816;
+    border-radius: 50%;
+    color: #b97816;
+    font-size: 25px;
+    font-weight: 700;
+}
+.donation-failure-card h4{
+    margin: 14px 0 8px;
+    color: #5b3a12;
+    font-weight: 700;
+}
+.donation-failure-card p{
+    margin: 0 auto 18px;
+    max-width: 520px;
+    color: #76572d;
+}
+.donation-retry-button{
+    border: 1px solid #5b3a12;
+    border-radius: 20px;
+    padding: 9px 22px;
+    background: #5b3a12;
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+.donation-retry-button:hover,
+.donation-retry-button:focus-visible{
+    background: #3e270d;
 }
 .frequency-toggle{
     display: inline-flex;

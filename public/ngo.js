@@ -51,10 +51,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     partnerMenus.forEach((menu) => {
 
-        const trigger =
+        let trigger =
             menu.querySelector(
-                '.partners-toggle, :scope > .nav-link'
-            ) || menu.firstChild;
+                '.partners-toggle, :scope > .nav-link, :scope > a'
+            );
+
+        if (!trigger && menu.querySelector(':scope > .dropdown')) {
+            const partnerText = Array.from(menu.childNodes).find((node) =>
+                node.nodeType === Node.TEXT_NODE &&
+                node.textContent.trim().toLowerCase() === 'partners'
+            );
+
+            if (partnerText) {
+                trigger = document.createElement('button');
+                trigger.type = 'button';
+                trigger.className = 'partners-toggle';
+                trigger.textContent = 'Partners';
+                trigger.setAttribute('aria-expanded', 'false');
+                partnerText.replaceWith(trigger);
+            }
+        }
 
 
         if (!trigger || trigger.nodeType !== Node.ELEMENT_NODE) return;
@@ -130,6 +146,10 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
         }
+
+        // Keep the menu closed when the hamburger opens; Partners opens only
+        // after its own trigger is clicked.
+        setOpen(false);
 
 
         document.addEventListener(
@@ -1882,6 +1902,77 @@ document.addEventListener(
         // SHOW DONATION MESSAGE
         // ============================================================
 
+        const successCard =
+            document.getElementById('donate-success');
+
+        const successClose =
+            document.getElementById('donate-success-close');
+
+        const failureCard =
+            document.getElementById('donate-failure');
+
+        const failureClose =
+            document.getElementById('donate-failure-close');
+
+        const retryButton =
+            document.getElementById('donate-retry');
+
+        if (successClose && successCard) {
+            successClose.addEventListener('click', () => {
+                successCard.hidden = true;
+            });
+        }
+
+        if (failureClose && failureCard) {
+            failureClose.addEventListener('click', () => {
+                failureCard.hidden = true;
+            });
+        }
+
+        if (retryButton && failureCard) {
+            retryButton.addEventListener('click', () => {
+                failureCard.hidden = true;
+                donateForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const firstField = donateForm.querySelector('input, select, textarea');
+                if (firstField) firstField.focus({ preventScroll: true });
+            });
+        }
+
+        function showDonationSuccess(message) {
+            if (!successCard) {
+                showDonationMessage(message, 'success');
+                return;
+            }
+
+            const messageElement =
+                document.getElementById('donate-success-message');
+
+            if (messageElement) messageElement.textContent = message;
+            successCard.hidden = false;
+            successCard.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+
+        function showDonationFailure(message) {
+            if (!failureCard) {
+                showDonationMessage(message, 'error');
+                return;
+            }
+
+            const messageElement =
+                document.getElementById('donate-failure-message');
+
+            if (messageElement) {
+                messageElement.textContent = message;
+            }
+
+            if (successCard) successCard.hidden = true;
+            failureCard.hidden = false;
+            failureCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
         function showDonationMessage(
             message,
             type
@@ -1967,9 +2058,8 @@ document.addEventListener(
                 'cancelled'
             ) {
 
-                showDonationMessage(
-                    'Your payment was cancelled. No donation was charged.',
-                    'error'
+                showDonationFailure(
+                    'Your payment was cancelled and no donation was charged. Every amount makes a meaningful difference, so please try again when you are ready.'
                 );
 
 
@@ -2041,16 +2131,14 @@ document.addEventListener(
                     true
                 ) {
 
-                    showDonationMessage(
+                    showDonationSuccess(
                         'Thank you! Your donation payment was received successfully.',
-                        'success'
                     );
 
                 } else {
 
-                    showDonationMessage(
-                        'We returned from Stripe, but the payment has not been confirmed yet. Please check your email or contact us if needed.',
-                        'error'
+                    showDonationFailure(
+                        'We could not confirm that payment. No donation was charged. Every amount matters, so please try again or contact us if you believe you were charged.'
                     );
 
                 }
@@ -2067,9 +2155,8 @@ document.addEventListener(
                 );
 
 
-                showDonationMessage(
-                    'We could not verify your payment automatically. Please contact us if your account was charged.',
-                    'error'
+                showDonationFailure(
+                    'We could not verify your payment automatically. Please try again. Every amount matters, and please contact us if you believe you were charged.'
                 );
 
             }
