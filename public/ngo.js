@@ -36,6 +36,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
         });
 
+        document.addEventListener('click', function (event) {
+            if (
+                collapse &&
+                collapse.classList.contains('show') &&
+                !collapse.contains(event.target) &&
+                !btn.contains(event.target)
+            ) {
+                collapse.classList.remove('show');
+                btn.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
     }
 
 
@@ -94,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const isDesktop =
             window.matchMedia(
-                '(min-width: 768px)'
+                '(min-width: 836px)'
             ).matches;
 
 

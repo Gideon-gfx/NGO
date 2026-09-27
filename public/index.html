@@ -142,15 +142,17 @@
             </a>
         </div>
         <!-- Responsive centered nav with hamburger on small screens -->
-        <nav class="navbar navbar-expand-md navbar-light p-0">
+        <nav class="navbar navbar-expand-lg navbar-light p-0">
             <div class="container-fluid p-0 d-flex">
                 <div class="collapse navbar-collapse justify-content-center" id="mainNav">
                     <ul class="navbar-nav">
                         <!-- dropdown -->
-                        <li class="nav-item nav-link">
-                            Partners
+                        <li class="nav-item dropdown-holder">
+                            <button class="partners-toggle" type="button" aria-expanded="false" aria-controls="partnersDropdown">
+                                Partners
+                            </button>
                             <div class="dropdown">
-                                <a href="/slum2school">Slum2SCHOOL</a>
+                                <a id="partnersDropdown" href="/slum2school">Slum2SCHOOL</a>
                             </div>
                         </li>
                         <!-- dropdown -->
@@ -158,7 +160,7 @@
                         <li class="nav-item"><a class="nav-link" href="/program">PROGRAM</a></li>
                         <li class="nav-item"><a class="nav-link" href="/event">EVENT</a></li>
                         <li class="nav-item"><a class="nav-link" href="/support">SUPPORT</a></li>
-                        <li class="nav-item d-md-none"><a class="nav-link" href="/donate"><span class="mobile-donate">Donate Now</span></a></li>
+                        <li class="nav-item d-lg-none"><a class="nav-link" href="/donate"><span class="mobile-donate">Donate Now</span></a></li>
                     </ul>
                 </div>
                 <div class="action-buttons">
