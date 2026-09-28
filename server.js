@@ -611,39 +611,44 @@ app.post('/donate', async (req, res) => {
 
     try {
 
+        const donationData =
+            req.body && typeof req.body === 'object'
+                ? req.body
+                : {};
+
         console.log(
             'Donation request received:',
-            req.body
+            donationData
         );
 
 
         const name =
             cleanText(
-                req.body.name
+                donationData.name
             );
 
 
         const email =
             cleanText(
-                req.body.email
+                donationData.email
             ).toLowerCase();
 
 
         const frequency =
             cleanText(
-                req.body.frequency ||
+                donationData.frequency ||
                 'one-time'
             );
 
 
         const instruments =
             normalizeInstruments(
-                req.body.instruments
+                donationData.instruments
             );
 
 
         const amountRaw =
-            req.body.amount;
+            donationData.amount;
 
 
         // ====================================================

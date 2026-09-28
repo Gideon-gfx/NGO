@@ -189,17 +189,10 @@
 
                         <ul class="navbar-nav">
 
-                            <li class="nav-item nav-link">
-
-                                Partners
-
-                                <div class="dropdown">
-
-                                    <a href="/slum2school">
-                                        Slum2SCHOOL
-                                    </a>
-
-                                </div>
+                            <li class="nav-item dropdown-holder">
+                                <button class="partners-toggle" type="button" aria-expanded="false" aria-controls="partnersDropdown">Partners</button>
+                                <div class="dropdown" id="partnersDropdown">
+                                    <a href="/slum2school">Slum2SCHOOL</a>
 
                             </li>
 
@@ -813,11 +806,11 @@
                     </span>
 
                     <input
-                        type="number"
+                        type="text"
+                        inputmode="numeric"
+                        autocomplete="off"
                         id="donate-amount"
                         name="amount"
-                        min="100"
-                        step="1"
                         placeholder="Enter an amount"
                     >
 
@@ -1193,7 +1186,8 @@
             <div
                 class="form-success donation-success-card"
                 id="donate-success"
-                role="status"
+                role="dialog"
+                aria-modal="true"
                 aria-live="polite"
                 hidden
             >
@@ -1241,7 +1235,8 @@
             <div
                 class="donation-failure-card"
                 id="donate-failure"
-                role="alert"
+                role="alertdialog"
+                aria-modal="true"
                 aria-live="assertive"
                 hidden
             >
@@ -1251,7 +1246,7 @@
                     id="donate-failure-close"
                     aria-label="Close payment message"
                 >&times;</button>
-                <span class="icon donation-failure-icon" aria-hidden="true">!</span>
+                <span class="icon donation-failure-icon" aria-hidden="true">&times;</span>
                 <h4 id="donate-failure-title">Your donation was not completed</h4>
                 <p id="donate-failure-message">
                     No donation was charged. Every amount makes a meaningful difference,
@@ -2052,6 +2047,28 @@ document.addEventListener(
         }
 
 
+        function formatAmountInput(input) {
+
+            const caret = input.selectionStart ?? input.value.length;
+            const digitsBeforeCaret = input.value
+                .slice(0, caret)
+                .replace(/\D/g, '').length;
+            const digits = input.value.replace(/\D/g, '');
+            const formatted = digits.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+            input.value = formatted;
+
+            let nextCaret = 0;
+            let countedDigits = 0;
+            while (nextCaret < formatted.length && countedDigits < digitsBeforeCaret) {
+                if (/\d/.test(formatted[nextCaret])) countedDigits++;
+                nextCaret++;
+            }
+            input.setSelectionRange(nextCaret, nextCaret);
+
+        }
+
+
         /* =================================================
            AMOUNT PRESETS
         ================================================= */
@@ -2104,9 +2121,7 @@ document.addEventListener(
                         ) {
 
                             amountInput.value =
-                                String(
-                                    validAmount
-                                );
+                                validAmount.toLocaleString('en-NG');
 
                         } else {
 
@@ -2148,9 +2163,7 @@ document.addEventListener(
             ) {
 
                 amountInput.value =
-                    String(
-                        initialAmount
-                    );
+                    initialAmount.toLocaleString('en-NG');
 
             }
 
@@ -2164,6 +2177,8 @@ document.addEventListener(
         amountInput.addEventListener(
             'input',
             function () {
+
+                formatAmountInput(this);
 
                 const customPreset =
                     document.getElementById(
@@ -2452,9 +2467,7 @@ document.addEventListener(
                 ) {
 
                     amountInput.value =
-                        String(
-                            amount
-                        );
+                        amount.toLocaleString('en-NG');
 
                 }
 

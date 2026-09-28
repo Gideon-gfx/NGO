@@ -1849,10 +1849,9 @@ document.addEventListener(
                         'instrument'
                     ) {
 
-                        showDonationMessage(
+                        showDonationSuccess(
                             data.message ||
-                            'Thank you! Your instrument donation details have been received.',
-                            'success'
+                            'Thank you! Your instrument donation details have been received.'
                         );
 
 
@@ -1877,10 +1876,9 @@ document.addEventListener(
                     );
 
 
-                    showDonationMessage(
+                    showDonationFailure(
                         error.message ||
-                        'Something went wrong while processing your donation.',
-                        'error'
+                        'Something went wrong while processing your donation.'
                     );
 
 
@@ -1941,18 +1939,21 @@ document.addEventListener(
         if (successClose && successCard) {
             successClose.addEventListener('click', () => {
                 successCard.hidden = true;
+                document.body.classList.remove('donation-modal-open');
             });
         }
 
         if (failureClose && failureCard) {
             failureClose.addEventListener('click', () => {
                 failureCard.hidden = true;
+                document.body.classList.remove('donation-modal-open');
             });
         }
 
         if (retryButton && failureCard) {
             retryButton.addEventListener('click', () => {
                 failureCard.hidden = true;
+                document.body.classList.remove('donation-modal-open');
                 donateForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 const firstField = donateForm.querySelector('input, select, textarea');
                 if (firstField) firstField.focus({ preventScroll: true });
@@ -1969,11 +1970,10 @@ document.addEventListener(
                 document.getElementById('donate-success-message');
 
             if (messageElement) messageElement.textContent = message;
+            if (failureCard) failureCard.hidden = true;
             successCard.hidden = false;
-            successCard.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
+            document.body.classList.add('donation-modal-open');
+            successClose?.focus({ preventScroll: true });
         }
 
         function showDonationFailure(message) {
@@ -1991,7 +1991,8 @@ document.addEventListener(
 
             if (successCard) successCard.hidden = true;
             failureCard.hidden = false;
-            failureCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            document.body.classList.add('donation-modal-open');
+            failureClose?.focus({ preventScroll: true });
         }
 
         function showDonationMessage(
@@ -2074,13 +2075,12 @@ document.addEventListener(
             // CANCELLED
             // ========================================================
 
-            if (
-                payment ===
-                'cancelled'
-            ) {
+            if (payment === 'cancelled' || payment === 'failed') {
 
                 showDonationFailure(
-                    'Your payment was cancelled and no donation was charged. Every amount makes a meaningful difference, so please try again when you are ready.'
+                    payment === 'cancelled'
+                        ? 'Your payment was cancelled and no donation was charged. Please try again when you are ready.'
+                        : 'Your payment could not be completed. Please check your payment details and try again.'
                 );
 
 

@@ -48,13 +48,11 @@
             <div class="container-fluid p-0 d-flex">
                 <div class="collapse navbar-collapse justify-content-center" id="mainNav">
                     <ul class="navbar-nav">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="partnersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Partners
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="partnersDropdown">
-                                    <li><a class="dropdown-item" href="/slum2school">Slum2SCHOOL</a></li>
-                                </ul>
+                            <li class="nav-item dropdown-holder">
+                                <button class="partners-toggle" type="button" aria-expanded="false" aria-controls="partnersDropdown">Partners</button>
+                                <div class="dropdown" id="partnersDropdown">
+                                    <a href="/slum2school">Slum2SCHOOL</a>
+                                </div>
                             </li>
                         <li class="nav-item"><a class="nav-link active" href="/about">ABOUT</a></li>
                         <li class="nav-item"><a class="nav-link" href="/program">PROGRAM</a></li>
