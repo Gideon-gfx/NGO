@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="ngo.css">
-</head>
+<link rel="stylesheet" href="/gallery.css"><script src="/community.js" defer></script></head>
 <body>
 
 
@@ -147,8 +147,8 @@
             <span class="eyebrow">Mailing List</span>
             <h2>Never Miss An Update</h2>
             <p style="max-width:600px;">Sign up to hear about upcoming concerts, hub news and volunteer opportunities.</p>
-            <form class="mailing-form" style="max-width:420px;" method="post" action="/contact">
-                <input type="email" name="email" placeholder="Your email address" required>
+            <form class="mailing-form" style="max-width:420px;" data-subscribe>
+                <input type="email" name="email" placeholder="Your email address" required><label style="display:block;margin:12px 0"><input type="checkbox" name="consent" required> I agree to receive Lagos Sistema email updates.</label>
                 <button type="submit" class="btn">Subscribe</button>
             </form>
         </div>

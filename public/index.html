@@ -109,7 +109,7 @@
     
 </style>
 
-</head>
+<link rel="stylesheet" href="/gallery.css"><script src="/community.js" defer></script></head>
 <body>
 
 
@@ -147,6 +147,7 @@
                 <div class="collapse navbar-collapse justify-content-center" id="mainNav">
                     <ul class="navbar-nav">
                         <!-- dropdown -->
+                        <li class="nav-item"><a class="nav-link" href="/gallery">GALLERY</a></li>
                         <li class="nav-item dropdown-holder">
                             <button class="partners-toggle" type="button" aria-expanded="false" aria-controls="partnersDropdown">
                                 Partners
@@ -241,7 +242,8 @@
         </div>
     </section>
 
-    <!-- about + stats -->
+    <section class="gallery-invite"><span class="gallery-eyebrow">Our community in focus</span><h2>Music. Connection. Moments that matter.</h2><p>Explore photos and videos from Lagos Sistema.</p><a class="ls-button" href="/gallery">View our gallery</a></section>
+<!-- about + stats -->
     <section class="section about-section">
         <div class="section-inner two-col">
             <div class="col col-text">
@@ -502,7 +504,7 @@
             <h3>Join Our Mailing List</h3>
             <p>Get updates on programs, events and stories from Lagos Sistema &ndash; straight to your inbox.</p>
             <form id="mailingForm" class="mailing-form">
-                <input type="email" name="email" placeholder="Your email address" required>
+                <input type="email" name="email" placeholder="Your email address" required><label style="display:block;margin:12px 0"><input type="checkbox" name="consent" required> I agree to receive Lagos Sistema email updates.</label>
                 <button type="submit" class="btn">Subscribe</button>
             </form>
         </div>
@@ -540,5 +542,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
     <script src="ngo.js"></script>
-   </body>
+   <dialog id="gallery-invite" class="ls-dialog" aria-labelledby="invite-title"><button class="ls-close" aria-label="Close gallery invitation">×</button><span class="gallery-eyebrow">Our community in focus</span><h2 id="invite-title">Step into our story.</h2><p>Discover the music, friendships and moments that bring our community together.</p><a class="ls-button" href="/gallery">View our gallery</a><button class="ls-secondary" id="invite-dismiss">Maybe later</button></dialog></body>
 </html>

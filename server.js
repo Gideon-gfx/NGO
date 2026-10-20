@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: require('path').join(__dirname, '.env'), override: true });
 
 const express = require('express');
 const path = require('path');
@@ -32,7 +32,7 @@ const GMAIL_USER =
     process.env.GMAIL_USER;
 
 const GMAIL_APP_PASSWORD =
-    process.env.GMAIL_APP_PASSWORD;
+    (process.env.GMAIL_APP_PASSWORD || '').split('').filter(c=>c.trim().length>0).join('');
 
 const DONATION_EMAIL =
     process.env.DONATION_EMAIL;
@@ -1404,6 +1404,10 @@ app.get('/links', (req, res) => {
 // 404
 // ============================================================
 
+require('./gallery-admin')(app, mailer);
+
+require('./gallery-server')(app, mailer || { sendMail: async () => { throw new Error('Gmail not configured'); } });
+
 app.use((req, res) => {
 
     res.status(404).json({
@@ -1452,6 +1456,8 @@ app.use((error, req, res, next) => {
 // ============================================================
 // START
 // ============================================================
+
+
 
 app.listen(
     PORT,
