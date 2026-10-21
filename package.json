@@ -17,7 +17,7 @@
     "bootstrap-icons": "^1.13.1",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "nodemailer": "^9.0.5",
+    "nodemailer": "^10.0.9",
     "qs": "^6.15.2",
     "stripe": "^22.5.0"
   }
