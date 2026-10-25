@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const fs = require('fs/promises');
 const path = require('path');
+const getEncryptionKey = require('./gallery-crypto');
 const storage = path.join(__dirname, 'private-gallery');
 const digest = value => crypto.createHash('sha256').update(value).digest('hex');
 
@@ -73,8 +74,7 @@ module.exports = function installGallery(app, mailer) {
       const items = JSON.parse(await fs.readFile(path.join(storage, 'manifest.json'), 'utf8'));
       const item = items.find(x => x.id === req.params.id);
       if (!item) return res.sendStatus(404);
-      const key = Buffer.from(process.env.GALLERY_ENCRYPTION_KEY || (await fs.readFile(path.join(storage, 'encryption.key'), 'utf8')).trim(), 'hex');
-      if (key.length !== 32) return res.sendStatus(503);
+      const key = await getEncryptionKey(storage);
       const encrypted = await fs.readFile(path.join(storage, item.id + '.enc'));
       const decipher = crypto.createDecipheriv('aes-256-gcm', key, encrypted.subarray(0, 12));
       decipher.setAuthTag(encrypted.subarray(12, 28));
