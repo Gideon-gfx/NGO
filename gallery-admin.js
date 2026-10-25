@@ -4,7 +4,7 @@ module.exports=(app,mailer)=>{
  const sessions=new Map(),attempts=new Map(),resets=new Map(),setups=new Map();let queue=Promise.resolve(),setupInProgress=false;
  const timer=setInterval(()=>{for(const map of [sessions,attempts,resets,setups])for(const [k,v] of map)if(v.expires<Date.now())map.delete(k)},60000);timer.unref();
  app.use('/api/gallery-admin',(req,res,next)=>{res.set('Cache-Control','no-store');next()});
- app.get('/admin/gallery',(req,res)=>res.sendFile(path.join(__dirname,'public/gallery-admin.html')));
+ app.get('/admin/gallery',(req,res)=>res.set('Cache-Control','no-store').sendFile(path.join(__dirname,'public/gallery-admin.html')));
  const configFile=path.join(storage,'admin-password.json');
  const readConfig=async()=>JSON.parse(await fs.readFile(configFile,'utf8'));
  app.get('/api/gallery-admin/status',async(req,res)=>{try{await readConfig();res.json({configured:true})}catch(e){if(e.code==='ENOENT')return res.json({configured:false});res.status(503).json({error:'Admin settings could not be read.'})}});
