@@ -2,7 +2,8 @@ const crypto = require('crypto');
 const fs = require('fs/promises');
 const path = require('path');
 const getEncryptionKey = require('./gallery-crypto');
-const storage = path.join(__dirname, 'private-gallery');
+const getGalleryStorage = require('./gallery-storage');
+const storage = getGalleryStorage.path;
 const digest = value => crypto.createHash('sha256').update(value).digest('hex');
 
 module.exports = function installGallery(app, mailer) {
@@ -66,11 +67,12 @@ module.exports = function installGallery(app, mailer) {
   });
   app.post('/api/gallery/logout', allowed, (req, res) => { sessions.delete(digest(req.headers.authorization.slice(7))); res.sendStatus(204); });
   app.get('/api/gallery/media', allowed, async (req, res) => {
-    try { const items = JSON.parse(await fs.readFile(path.join(storage, 'manifest.json'), 'utf8')); res.json(items.map(({ id, title, caption, type }) => ({ id, title, caption, type }))); }
+    try { await getGalleryStorage(); const items = JSON.parse(await fs.readFile(path.join(storage, 'manifest.json'), 'utf8')); res.json(items.map(({ id, title, caption, type }) => ({ id, title, caption, type }))); }
     catch (e) { if (e.code === 'ENOENT') return res.json([]); res.status(500).json({ error: 'Gallery unavailable.' }); }
   });
   app.get('/api/gallery/media/:id', allowed, async (req, res) => {
     try {
+      await getGalleryStorage();
       const items = JSON.parse(await fs.readFile(path.join(storage, 'manifest.json'), 'utf8'));
       const item = items.find(x => x.id === req.params.id);
       if (!item) return res.sendStatus(404);
